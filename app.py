@@ -51,9 +51,9 @@ if option == "Gambar":
     uploaded_image = st.file_uploader("Upload gambar (jpg/jpeg/png)", type=["jpg", "jpeg", "png"])
     if uploaded_image is not None:
         image = Image.open(uploaded_image)
-        st.image(image, caption="Gambar yang diupload", use_column_width=True)
+        st.image(image, caption="Gambar yang diupload", use_container_width=True)
         result_image = predict_image(image)
-        st.image(result_image, caption="Hasil Deteksi", use_column_width=True)
+        st.image(result_image, caption="Hasil Deteksi", use_container_width=True)
 
 # Untuk input Video
 elif option == "Video":
