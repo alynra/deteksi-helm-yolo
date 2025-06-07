@@ -52,27 +52,26 @@ def predict_webcam():
     stframe = st.empty()
     cap = cv2.VideoCapture(0)
 
-    st.info("Menekan 'Stop' atau tutup tab untuk menghentikan webcam.")
+    st.info("Tekan tombol 'Stop Webcam' untuk menghentikan.")
+    stop_button = st.button("Stop Webcam")
+
     while cap.isOpened():
-        success, frame = cap.read()
-        if not success:
-            st.warning("Tidak bisa mengakses webcam.")
+        ret, frame = cap.read()
+        if not ret:
+            st.warning("Tidak dapat membaca frame dari webcam.")
             break
 
-        # Deteksi dengan YOLO
         results = model.predict(frame)
         annotated_frame = results[0].plot()
-
-        # Konversi ke RGB & tampilkan
         annotated_frame = cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB)
         stframe.image(annotated_frame, channels="RGB", use_container_width=True)
 
-        # Hentikan dengan tombol
-        if st.button("Stop Webcam"):
+        # Cek tombol berhenti ditekan
+        if stop_button:
             break
 
     cap.release()
-    cv2.destroyAllWindows()
+
 
 # Untuk input Gambar
 if option == "Gambar":
