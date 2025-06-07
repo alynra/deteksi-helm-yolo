@@ -1,30 +1,30 @@
 import streamlit as st
-from ultralytics import YOLO
+from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, WebRtcMode
+import av
 import tempfile
 import cv2
-import os
-from PIL import Image
 import numpy as np
-import time
-
-# Judul Aplikasi
-st.title("YOLO Object Detection (Gambar, Video, Webcam)")
-st.write("Upload gambar, video, atau gunakan webcam untuk mendeteksi objek menggunakan model YOLO.")
+from PIL import Image
+from ultralytics import YOLO
 
 # Load model YOLO
-model_path = "best.pt"  # Ganti ke path custom model jika diperlukan
+model_path = "best.pt"  # Ganti dengan custom model jika perlu
 model = YOLO(model_path)
 
-# Sidebar untuk memilih jenis input
-option = st.sidebar.radio("Pilih jenis input:", ("Gambar", "Video", "Webcam"))
+# Judul aplikasi
+st.title("YOLO Object Detection: Gambar, Video, Webcam")
+st.write("Deteksi objek menggunakan model YOLO dari gambar, video, atau webcam secara real-time.")
 
-# Fungsi untuk prediksi gambar
+# Sidebar: Pilihan mode input
+option = st.sidebar.radio("Pilih metode input:", ("Gambar", "Video", "Webcam"))
+
+# ===== Fungsi Prediksi Gambar =====
 def predict_image(image):
     results = model.predict(image)
     result_img = results[0].plot()
     return result_img
 
-# Fungsi untuk prediksi video
+# ===== Fungsi Prediksi Video =====
 def predict_video(video_path):
     cap = cv2.VideoCapture(video_path)
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -47,33 +47,15 @@ def predict_video(video_path):
     out.release()
     return temp_output.name
 
-# Fungsi untuk prediksi webcam
-def predict_webcam():
-    stframe = st.empty()
-    cap = cv2.VideoCapture(0)
+# ===== Kelas Webcam (streamlit-webrtc) =====
+class YOLOProcessor(VideoProcessorBase):
+    def recv(self, frame: av.VideoFrame) -> av.VideoFrame:
+        img = frame.to_ndarray(format="bgr24")
+        results = model.predict(img)
+        annotated = results[0].plot()
+        return av.VideoFrame.from_ndarray(annotated, format="bgr24")
 
-    st.info("Tekan tombol 'Stop Webcam' untuk menghentikan.")
-    stop_button = st.button("Stop Webcam")
-
-    while cap.isOpened():
-        ret, frame = cap.read()
-        if not ret:
-            st.warning("Tidak dapat membaca frame dari webcam.")
-            break
-
-        results = model.predict(frame)
-        annotated_frame = results[0].plot()
-        annotated_frame = cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB)
-        stframe.image(annotated_frame, channels="RGB", use_container_width=True)
-
-        # Cek tombol berhenti ditekan
-        if stop_button:
-            break
-
-    cap.release()
-
-
-# Untuk input Gambar
+# ====== MODE: GAMBAR ======
 if option == "Gambar":
     uploaded_image = st.file_uploader("Upload gambar (jpg/jpeg/png)", type=["jpg", "jpeg", "png"])
     if uploaded_image is not None:
@@ -82,7 +64,7 @@ if option == "Gambar":
         result_image = predict_image(np.array(image))
         st.image(result_image, caption="Hasil Deteksi", use_container_width=True)
 
-# Untuk input Video
+# ====== MODE: VIDEO ======
 elif option == "Video":
     uploaded_video = st.file_uploader("Upload video (mp4/mov)", type=["mp4", "mov"])
     if uploaded_video is not None:
@@ -96,9 +78,14 @@ elif option == "Video":
 
         st.video(result_video_path)
 
-# Untuk input Webcam
+# ====== MODE: WEBCAM ======
 elif option == "Webcam":
-    st.subheader("Webcam Live Detection")
-    start = st.button("Mulai Webcam")
-    if start:
-        predict_webcam()
+    st.subheader("Deteksi Objek dari Webcam (Real-time)")
+    st.markdown("Klik 'Allow' saat browser meminta izin webcam.")
+    webrtc_streamer(
+        key="yolo-webcam",
+        mode=WebRtcMode.SENDRECV,
+        video_processor_factory=YOLOProcessor,
+        media_stream_constraints={"video": True, "audio": False},
+        async_processing=True,
+    )
