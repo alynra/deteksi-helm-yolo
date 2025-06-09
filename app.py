@@ -82,10 +82,15 @@ class YOLOProcessor(VideoProcessorBase):
     def recv(self, frame: av.VideoFrame) -> av.VideoFrame:
         img = frame.to_ndarray(format="bgr24")
         print("[DEBUG] Menerima frame dari webcam")
-        results = model.predict(img)
-        annotated = results[0].plot()
-        return av.VideoFrame.from_ndarray(annotated, format="bgr24")
+        results = model.predict(img, conf=0.1, verbose=False)
+        print("[DEBUG] Jumlah deteksi:", len(results[0].boxes))
+        if results and len(results[0].boxes) > 0:
+            annotated = results[0].plot()
+        else:
+            annotated = img  # Jika tidak ada deteksi, tampilkan frame asli
 
+        # Kembalikan frame
+        return av.VideoFrame.from_ndarray(annotated.astype(np.uint8), format="bgr24")
 
 # ====== MODE: GAMBAR ======
 if option == "Gambar":
