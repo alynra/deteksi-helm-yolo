@@ -10,10 +10,10 @@ from ultralytics import YOLO
 st.markdown("""
     <style>
     .stApp {
-        background: linear-gradient(to right, #fdfbfb, #ebedee);
+        background: white;
     }
     h1 {
-        color: #1e3a8a;
+        color: black;
     }
     </style>
 """, unsafe_allow_html=True)
