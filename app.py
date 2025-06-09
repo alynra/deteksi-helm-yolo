@@ -96,7 +96,7 @@ if "page" not in st.session_state:
     st.session_state.page = "Gambar"
 
 # Tangkap klik melalui query parameter (?page=...)
-query_params = st.query_params()
+query_params = st.experimental_get_query_params()
 if "page" in query_params:
     st.session_state.page = query_params["page"][0]
 
