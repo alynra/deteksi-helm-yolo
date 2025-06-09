@@ -92,20 +92,73 @@ class YOLOProcessor(VideoProcessorBase):
         # Kembalikan frame
         return av.VideoFrame.from_ndarray(annotated.astype(np.uint8), format="bgr24")
 
-# === Sidebar sebagai Navigasi ===
-st.sidebar.title("Menu Navigasi")
-
-# Gunakan session_state untuk simpan navigasi
+# Inisialisasi halaman jika belum ada
 if "page" not in st.session_state:
     st.session_state.page = "Gambar"
 
+# ===== CSS Styling untuk Sidebar Menu =====
+st.markdown("""
+    <style>
+    /* Sidebar ke atas */
+    section[data-testid="stSidebar"] div[data-testid="stVerticalBlock"] {
+        align-items: flex-start;
+        padding-top: 1rem;
+    }
+
+    .nav-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        color: #1f2937;
+    }
+
+    .nav-item {
+        font-size: 1rem;
+        font-weight: 500;
+        padding: 0.5rem 0;
+        width: 100%;
+        display: block;
+        color: #374151;
+        border-bottom: 1px solid #e5e7eb;
+        text-decoration: none;
+        transition: background 0.2s ease;
+    }
+
+    .nav-item:hover {
+        background-color: #f3f4f6;
+        color: #111827;
+    }
+
+    .nav-active {
+        background-color: #e5e7eb;
+        font-weight: bold;
+        color: #5B2EFF;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+st.sidebar.markdown("<div class='nav-title'>🧭 Menu Navigasi</div>", unsafe_allow_html=True)
+
+def nav_link(label, icon, page_name):
+    active = st.session_state.page == page_name
+    css_class = "nav-item nav-active" if active else "nav-item"
+    # Sidebar tombol tidak digunakan, hanya clickable style
+    if st.sidebar.button(f"{icon} {label}", key=label):
+        st.session_state.page = page_name
+    st.sidebar.markdown(f"<div class='{css_class}'>{icon} {label}</div>", unsafe_allow_html=True)
+
+# Tambahkan item navigasi
+nav_link("Gambar", "🖼️", "Gambar")
+nav_link("Video", "🎞️", "Video")
+nav_link("Webcam", "📷", "Webcam")
+
 # Tombol navigasi
-if st.sidebar.button("Gambar"):
-    st.session_state.page = "Gambar"
-if st.sidebar.button("Video"):
-    st.session_state.page = "Video"
-if st.sidebar.button("Webcam"):
-    st.session_state.page = "Webcam"
+#if st.sidebar.button("Gambar"):
+#    st.session_state.page = "Gambar"
+#if st.sidebar.button("Video"):
+#    st.session_state.page = "Video"
+#if st.sidebar.button("Webcam"):
+#    st.session_state.page = "Webcam"
 
 # ======= KONTEN BERDASARKAN NAVIGASI =======
 option = st.session_state.page
