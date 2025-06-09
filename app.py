@@ -30,8 +30,9 @@ def predict_video(video_path):
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     fps = int(cap.get(cv2.CAP_PROP_FPS))
+    if fps == 0: fps = 25
 
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    fourcc = cv2.VideoWriter_fourcc(*'avc1')
     temp_output = tempfile.NamedTemporaryFile(delete=False, suffix=".mp4")
     out = cv2.VideoWriter(temp_output.name, fourcc, fps, (width, height))
 
@@ -45,7 +46,11 @@ def predict_video(video_path):
 
     cap.release()
     out.release()
+    cv2.destroyAllWindows()
+    temp_output.flush()
+    temp_output.close()
     return temp_output.name
+
 
 # ===== Kelas Webcam (streamlit-webrtc) =====
 class YOLOProcessor(VideoProcessorBase):
