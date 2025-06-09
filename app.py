@@ -30,9 +30,10 @@ def predict_video(video_path):
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     fps = int(cap.get(cv2.CAP_PROP_FPS))
-    if fps == 0: fps = 25
+    if fps == 0:
+        fps = 25  # fallback jika tidak terdeteksi
 
-    fourcc = cv2.VideoWriter_fourcc(*'avc1')
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     temp_output = tempfile.NamedTemporaryFile(delete=False, suffix=".mp4")
     out = cv2.VideoWriter(temp_output.name, fourcc, fps, (width, height))
 
@@ -47,9 +48,9 @@ def predict_video(video_path):
     cap.release()
     out.release()
     cv2.destroyAllWindows()
-    temp_output.flush()
-    temp_output.close()
+
     return temp_output.name
+
 
 
 # ===== Kelas Webcam (streamlit-webrtc) =====
@@ -75,13 +76,26 @@ elif option == "Video":
     if uploaded_video is not None:
         tfile = tempfile.NamedTemporaryFile(delete=False)
         tfile.write(uploaded_video.read())
-        st.video(tfile.name)
+        tfile.flush()
+        tfile.close()
+
+        st.video(tfile.name)  # Menampilkan video asli (optional)
 
         with st.spinner("Melakukan deteksi pada video..."):
             result_video_path = predict_video(tfile.name)
             st.success("Deteksi selesai!")
 
-        st.video(result_video_path)
+        # Baca kembali file hasil
+        with open(result_video_path, "rb") as f:
+            video_bytes = f.read()
+
+        st.download_button(
+            label="⬇️ Download Video Hasil Deteksi",
+            data=video_bytes,
+            file_name="video_deteksi_yolo.mp4",
+            mime="video/mp4"
+        )
+
 
 # ====== MODE: WEBCAM ======
 elif option == "Webcam":
