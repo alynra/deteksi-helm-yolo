@@ -143,8 +143,8 @@ def nav_link(label, icon, page_name):
     active = st.session_state.page == page_name
     css_class = "nav-item nav-active" if active else "nav-item"
     # Sidebar tombol tidak digunakan, hanya clickable style
-    if st.sidebar.button(f"{icon} {label}", key=label):
-        st.session_state.page = page_name
+    #if st.sidebar.button(f"{icon} {label}", key=label):
+        #st.session_state.page = page_name
     st.sidebar.markdown(f"<div class='{css_class}'>{icon} {label}</div>", unsafe_allow_html=True)
 
 # Tambahkan item navigasi
