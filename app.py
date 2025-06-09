@@ -140,8 +140,8 @@ st.markdown("""
 st.sidebar.markdown("<div class='nav-title'>🧭 Menu Navigasi</div>", unsafe_allow_html=True)
 
 def nav_link(label, icon, page_name):
-    active = st.session_state.page == page_name
-    css_class = "nav-item nav-active" if active else "nav-item"
+    option = st.session_state.page == page_name
+    css_class = "nav-item nav-active" if option else "nav-item"
     # Sidebar tombol tidak digunakan, hanya clickable style
     #if st.sidebar.button(f"{icon} {label}", key=label):
         #st.session_state.page = page_name
@@ -161,7 +161,7 @@ nav_link("Webcam", "📷", "Webcam")
 #    st.session_state.page = "Webcam"
 
 # ======= KONTEN BERDASARKAN NAVIGASI =======
-option = st.session_state.page
+#option = st.session_state.page
 
 # ====== MODE: GAMBAR ======
 if option == "Gambar":
