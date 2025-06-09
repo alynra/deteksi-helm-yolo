@@ -16,7 +16,7 @@ st.title("YOLO Object Detection: Gambar, Video, Webcam")
 st.write("Deteksi objek menggunakan model YOLO dari gambar, video, atau webcam secara real-time.")
 
 # Sidebar: Pilihan mode input
-option = st.sidebar.radio("Pilih metode input:", ("Gambar", "Video", "Webcam"))
+#option = st.sidebar.radio("Pilih metode input:", ("Gambar", "Video", "Webcam"))
 
 # ===== Fungsi Prediksi Gambar =====
 def predict_image(image):
@@ -91,6 +91,24 @@ class YOLOProcessor(VideoProcessorBase):
 
         # Kembalikan frame
         return av.VideoFrame.from_ndarray(annotated.astype(np.uint8), format="bgr24")
+
+# === Sidebar sebagai Navigasi ===
+st.sidebar.title("Menu Navigasi")
+
+# Gunakan session_state untuk simpan navigasi
+if "page" not in st.session_state:
+    st.session_state.page = "Gambar"
+
+# Tombol navigasi
+if st.sidebar.button("Gambar"):
+    st.session_state.page = "Gambar"
+if st.sidebar.button("Video"):
+    st.session_state.page = "Video"
+if st.sidebar.button("Webcam"):
+    st.session_state.page = "Webcam"
+
+# ======= KONTEN BERDASARKAN NAVIGASI =======
+option = st.session_state.page
 
 # ====== MODE: GAMBAR ======
 if option == "Gambar":
