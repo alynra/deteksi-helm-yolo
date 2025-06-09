@@ -92,43 +92,41 @@ class YOLOProcessor(VideoProcessorBase):
         # Kembalikan frame
         return av.VideoFrame.from_ndarray(annotated.astype(np.uint8), format="bgr24")
 
-# Inisialisasi halaman jika belum ada
 if "page" not in st.session_state:
     st.session_state.page = "Gambar"
 
-# ===== CSS Styling untuk Sidebar Menu =====
+# Tangkap klik melalui query parameter (?page=...)
+query_params = st.experimental_get_query_params()
+if "page" in query_params:
+    st.session_state.page = query_params["page"][0]
+
+# ==== CSS Styling Sidebar ====
 st.markdown("""
     <style>
-    /* Sidebar ke atas */
     section[data-testid="stSidebar"] div[data-testid="stVerticalBlock"] {
         align-items: flex-start;
         padding-top: 1rem;
     }
-
     .nav-title {
         font-size: 1.2rem;
         font-weight: bold;
         margin-bottom: 1rem;
         color: #1f2937;
     }
-
     .nav-item {
         font-size: 1rem;
         font-weight: 500;
-        padding: 0.5rem 0;
+        padding: 0.6rem 1rem;
         width: 100%;
         display: block;
         color: #374151;
         border-bottom: 1px solid #e5e7eb;
         text-decoration: none;
-        transition: background 0.2s ease;
     }
-
     .nav-item:hover {
         background-color: #f3f4f6;
         color: #111827;
     }
-
     .nav-active {
         background-color: #e5e7eb;
         font-weight: bold;
@@ -137,17 +135,16 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+# === Sidebar Navigasi (HTML links only) ===
 st.sidebar.markdown("<div class='nav-title'>🧭 Menu Navigasi</div>", unsafe_allow_html=True)
 
 def nav_link(label, icon, page_name):
-    option = st.session_state.page == page_name
-    css_class = "nav-item nav-active" if option else "nav-item"
-    # Sidebar tombol tidak digunakan, hanya clickable style
-    #if st.sidebar.button(f"{icon} {label}", key=label):
-        #st.session_state.page = page_name
-    st.sidebar.markdown(f"<div class='{css_class}'>{icon} {label}</div>", unsafe_allow_html=True)
+    is_active = st.session_state.page == page_name
+    nav_class = "nav-item nav-active" if is_active else "nav-item"
+    url = f"?page={page_name}"
+    st.sidebar.markdown(f"<a href='{url}' class='{nav_class}'>{icon} {label}</a>", unsafe_allow_html=True)
 
-# Tambahkan item navigasi
+# Navigasi menu
 nav_link("Gambar", "🖼️", "Gambar")
 nav_link("Video", "🎞️", "Video")
 nav_link("Webcam", "📷", "Webcam")
@@ -161,7 +158,7 @@ nav_link("Webcam", "📷", "Webcam")
 #    st.session_state.page = "Webcam"
 
 # ======= KONTEN BERDASARKAN NAVIGASI =======
-#option = st.session_state.page
+option = st.session_state.page
 
 # ====== MODE: GAMBAR ======
 if option == "Gambar":
