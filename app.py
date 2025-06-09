@@ -9,14 +9,15 @@ from ultralytics import YOLO
 
 st.markdown("""
     <style>
-        body {
-            background-color: lightpink;
-        }
-        h1 {
-            color: navy;
-        }
+    .stApp {
+        background: linear-gradient(to right, #fdfbfb, #ebedee);
+    }
+    h1 {
+        color: #1e3a8a;
+    }
     </style>
 """, unsafe_allow_html=True)
+
 
 
 # Load model YOLO
