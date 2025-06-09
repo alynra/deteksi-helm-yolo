@@ -27,27 +27,51 @@ def predict_image(image):
 # ===== Fungsi Prediksi Video =====
 def predict_video(video_path):
     cap = cv2.VideoCapture(video_path)
+
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     fps = int(cap.get(cv2.CAP_PROP_FPS))
     if fps == 0:
-        fps = 25  # fallback jika tidak terdeteksi
+        fps = 25  # fallback
 
+    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     temp_output = tempfile.NamedTemporaryFile(delete=False, suffix=".mp4")
     out = cv2.VideoWriter(temp_output.name, fourcc, fps, (width, height))
 
+    # Streamlit progress bar
+    progress_text = st.empty()
+    progress_bar = st.progress(0)
+
+    frame_count = 0
     while cap.isOpened():
         success, frame = cap.read()
         if not success:
             break
+
+        # Proses YOLO
         results = model.predict(frame)
         annotated_frame = results[0].plot()
         out.write(annotated_frame)
 
+        # Update progress
+        frame_count += 1
+        if total_frames > 0:
+            progress = int((frame_count / total_frames) * 100)
+            progress_bar.progress(min(progress, 100))
+            progress_text.text(f"Memproses frame {frame_count} / {total_frames}...")
+        else:
+            progress_text.text(f"Memproses frame {frame_count}...")
+
+        # Debug ke log terminal
+        if frame_count % 10 == 0:
+            print(f"[DEBUG] Frame ke-{frame_count} diproses")
+
     cap.release()
     out.release()
-    cv2.destroyAllWindows()
+
+    progress_text.text("Selesai!")
+    progress_bar.empty()
 
     return temp_output.name
 
