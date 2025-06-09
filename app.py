@@ -121,7 +121,8 @@ st.markdown("""
         display: block;
         color: #374151;
         border-bottom: 1px solid #e5e7eb;
-        text-decoration: none;
+        text-decoration: none;    
+        color: inherit;            
     }
     .nav-item:hover {
         background-color: #f3f4f6;
@@ -136,7 +137,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # === Sidebar Navigasi (HTML links only) ===
-st.sidebar.markdown("<div class='nav-title'>🧭 Menu Navigasi</div>", unsafe_allow_html=True)
+st.sidebar.markdown("<div class='nav-title'> Menu Navigasi</div>", unsafe_allow_html=True)
 
 def nav_link(label, icon, page_name):
     is_active = st.session_state.page == page_name
