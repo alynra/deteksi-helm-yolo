@@ -96,7 +96,7 @@ if "page" not in st.session_state:
     st.session_state.page = "Gambar"
 
 # Tangkap klik melalui query parameter (?page=...)
-query_params = st.experimental_get_query_params()
+query_params = st.query_params()
 if "page" in query_params:
     st.session_state.page = query_params["page"][0]
 
@@ -142,7 +142,7 @@ def nav_link(label, icon, page_name):
     is_active = st.session_state.page == page_name
     nav_class = "nav-item nav-active" if is_active else "nav-item"
     url = f"?page={page_name}"
-    st.sidebar.markdown(f"<a href='{url}' class='{nav_class}'>{icon} {label}</a>", unsafe_allow_html=True)
+    st.sidebar.markdown(f"<a href='{url}' target='_self' class='{nav_class}'>{icon} {label}</a>", unsafe_allow_html=True)
 
 # Navigasi menu
 nav_link("Gambar", "🖼️", "Gambar")
