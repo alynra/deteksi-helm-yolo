@@ -7,7 +7,6 @@ import numpy as np
 from PIL import Image
 from ultralytics import YOLO
 
-
 # Load model YOLO
 model_path = "best.pt"  # Ganti dengan custom model jika perlu
 model = YOLO(model_path)
@@ -155,4 +154,4 @@ elif option == "Webcam":
     elif webrtc_ctx.state.playing:
         st.info("Menginisialisasi webcam...")
     else:
-        st.warning("Webcam belum aktif atau tidak terdeteksi.")
+        st.warning("Webcam belum aktif atau tidak terdeteksi.")
