@@ -12,77 +12,10 @@ model_path = "best.pt"
 model = YOLO(model_path)
 
 # Konfigurasi halaman
-st.set_page_config(page_title="Helmet AI", page_icon="🪖", layout="wide")
-
-# Custom CSS untuk layout UI modern
-st.markdown("""
-    <style>
-        .main {
-            background: linear-gradient(to right, #e0eafc, #cfdef3);
-        }
-        .block-container {
-            padding-top: 2rem;
-            padding-bottom: 2rem;
-        }
-        .hero {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 2rem 1rem;
-        }
-        .hero-text {
-            flex: 1;
-            padding-right: 2rem;
-        }
-        .hero-image {
-            flex: 1;
-            text-align: center;
-        }
-        .hero-image img {
-            max-width: 90%;
-            border-radius: 12px;
-        }
-        .cta-button {
-            background-color: #ef4444;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            border: none;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .cta-button:hover {
-            background-color: #dc2626;
-        }
-        hr {
-            margin: 2rem 0;
-            border: none;
-            border-top: 1px solid #ccc;
-        }
-    </style>
-""", unsafe_allow_html=True)
-
-# ==== Hero Section ====
-st.markdown("""
-<div class="hero">
-    <div class="hero-text">
-        <h1 style='color: #1e3a8a; font-size: 3rem;'>Smart Helmet Detection</h1>
-        <p style='font-size: 1.2rem; line-height: 1.6; color: #374151;'>
-            Gunakan teknologi AI YOLO untuk mendeteksi pengendara motor yang tidak memakai helm secara otomatis dan real-time.
-            Sistem ini dirancang untuk mendukung keamanan jalan raya dan implementasi smart city.
-        </p>
-        <br>
-        <a href="#deteksi" class="cta-button">Coba Sekarang</a>
-    </div>
-    <div class="hero-image">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Motorcycle_flat_design_vector.svg/1024px-Motorcycle_flat_design_vector.svg.png" alt="Motor Illustration">
-    </div>
-</div>
-<hr id="deteksi"/>
-""", unsafe_allow_html=True)
+st.set_page_config(page_title="Deteksi penggunaan helm dan motor", layout="wide")
 
 # Sidebar Input Mode
-option = st.sidebar.radio("Pilih Metode Input", ("📷 Gambar", "🎞️ Video", "🎥 Webcam"))
+option = st.sidebar.radio("Pilih Metode Input", ("Gambar", "Video", "Webcam"))
 
 # Fungsi Deteksi Gambar
 def predict_image(image):
@@ -118,13 +51,13 @@ def predict_video(video_path):
         if total_frames > 0:
             percent = int((frame_count / total_frames) * 100)
             progress_bar.progress(min(percent, 100))
-            progress_text.text(f"📦 Memproses frame {frame_count} / {total_frames}...")
+            progress_text.text(f"Memproses frame {frame_count} / {total_frames}...")
         else:
-            progress_text.text(f"📦 Memproses frame {frame_count}...")
+            progress_text.text(f"Memproses frame {frame_count}...")
 
     cap.release()
     out.release()
-    progress_text.text("✅ Deteksi selesai!")
+    progress_text.text("Deteksi selesai!")
     progress_bar.empty()
     return temp_output.name
 
@@ -146,13 +79,13 @@ if option.startswith("📷"):
     uploaded_image = st.file_uploader("Unggah Gambar", type=["jpg", "jpeg", "png"])
     if uploaded_image:
         image = Image.open(uploaded_image)
-        st.image(image, caption="📥 Gambar yang diupload", use_container_width=True)
-        with st.spinner("🔍 Mendeteksi..."):
+        st.image(image, caption="Gambar yang diupload", use_container_width=True)
+        with st.spinner("Mendeteksi..."):
             result_image = predict_image(np.array(image))
-        st.image(result_image, caption="🎯 Hasil Deteksi", use_container_width=True)
+        st.image(result_image, caption="Hasil Deteksi", use_container_width=True)
 
 elif option.startswith("🎞️"):
-    st.subheader("🎞️ Deteksi dari Video")
+    st.subheader("Deteksi dari Video")
     uploaded_video = st.file_uploader("Unggah Video", type=["mp4", "mov"])
     if uploaded_video:
         tfile = tempfile.NamedTemporaryFile(delete=False)
@@ -161,21 +94,21 @@ elif option.startswith("🎞️"):
         tfile.close()
 
         st.video(tfile.name)
-        with st.spinner("⏳ Memproses video..."):
+        with st.spinner("Memproses video..."):
             result_video_path = predict_video(tfile.name)
 
         with open(result_video_path, "rb") as f:
             video_bytes = f.read()
-        st.success("✅ Selesai!")
+        st.success("Selesai!")
         st.download_button(
-            label="⬇️ Download Video Hasil",
+            label="Download Video Hasil",
             data=video_bytes,
             file_name="video_deteksi_yolo.mp4",
             mime="video/mp4"
         )
 
 elif option.startswith("🎥"):
-    st.subheader("🎥 Deteksi dari Webcam")
+    st.subheader("Deteksi dari Webcam")
     st.markdown("Klik 'Allow' untuk mengaktifkan kamera.")
 
     rtc_config = {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
