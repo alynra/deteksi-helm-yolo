@@ -7,18 +7,6 @@ import numpy as np
 from PIL import Image
 from ultralytics import YOLO
 
-st.markdown("""
-    <style>
-    .stApp {
-        background: white;
-    }
-    h1 {
-        color: black;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
-
 
 # Load model YOLO
 model_path = "best.pt"  # Ganti dengan custom model jika perlu
