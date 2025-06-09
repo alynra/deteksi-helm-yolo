@@ -7,20 +7,27 @@ import numpy as np
 from PIL import Image
 from ultralytics import YOLO
 
+# Konfigurasi halaman
+st.set_page_config(page_title="YOLO Object Detection", page_icon="🎯", layout="wide")
+
 # Load model YOLO
-model_path = "best.pt"  # Ganti dengan custom model jika perlu
+model_path = "best.pt"
 model = YOLO(model_path)
 
-# Judul aplikasi
-st.title("YOLO Object Detection: Gambar, Video, Webcam")
-st.write("Deteksi objek menggunakan model YOLO dari gambar, video, atau webcam secara real-time.")
+# Header
+st.markdown("""
+    <h1 style='text-align: center; color: #2C3E50;'>🎯 YOLO Object Detection</h1>
+    <p style='text-align: center; font-size: 16px;'>Deteksi objek secara real-time dari gambar, video, atau webcam dengan model YOLO custom.</p>
+    <hr style='border: 1px solid #ccc;'/>
+""", unsafe_allow_html=True)
 
-# Sidebar: Pilihan mode input
-option = st.sidebar.radio("Pilih metode input:", ("Gambar", "Video", "Webcam"))
+# Sidebar pilihan mode
+st.sidebar.header("📌 Pilih Input")
+option = st.sidebar.radio("Metode Input:", ("📷 Gambar", "🎞️ Video", "🎥 Webcam"))
 
 # ===== Fungsi Prediksi Gambar =====
 def predict_image(image):
-    results = model.predict(image)
+    results = model.predict(image, conf=0.25)
     result_img = results[0].plot()
     return result_img
 
@@ -30,16 +37,14 @@ def predict_video(video_path):
 
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    fps = int(cap.get(cv2.CAP_PROP_FPS))
-    if fps == 0:
-        fps = 25  # fallback
-
+    fps = int(cap.get(cv2.CAP_PROP_FPS)) or 25
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     temp_output = tempfile.NamedTemporaryFile(delete=False, suffix=".mp4")
     out = cv2.VideoWriter(temp_output.name, fourcc, fps, (width, height))
 
-    # Streamlit progress bar
+    # Progress UI
     progress_text = st.empty()
     progress_bar = st.progress(0)
 
@@ -48,78 +53,71 @@ def predict_video(video_path):
         success, frame = cap.read()
         if not success:
             break
-
-        # Proses YOLO
         results = model.predict(frame)
         annotated_frame = results[0].plot()
         out.write(annotated_frame)
 
-        # Update progress
         frame_count += 1
         if total_frames > 0:
-            progress = int((frame_count / total_frames) * 100)
-            progress_bar.progress(min(progress, 100))
-            progress_text.text(f"Memproses frame {frame_count} / {total_frames}...")
+            percent = int((frame_count / total_frames) * 100)
+            progress_bar.progress(min(percent, 100))
+            progress_text.text(f"📦 Memproses frame {frame_count} / {total_frames}...")
         else:
-            progress_text.text(f"Memproses frame {frame_count}...")
-
-        # Debug ke log terminal
-        if frame_count % 10 == 0:
-            print(f"[DEBUG] Frame ke-{frame_count} diproses")
+            progress_text.text(f"📦 Memproses frame {frame_count}...")
 
     cap.release()
     out.release()
 
-    progress_text.text("Selesai!")
+    progress_text.text("✅ Deteksi selesai!")
     progress_bar.empty()
 
     return temp_output.name
 
-
-
-# ===== Kelas Webcam (streamlit-webrtc) =====
+# ===== Kelas Webcam =====
 class YOLOProcessor(VideoProcessorBase):
     def recv(self, frame: av.VideoFrame) -> av.VideoFrame:
         img = frame.to_ndarray(format="bgr24")
-        print("[DEBUG] Menerima frame dari webcam")
         results = model.predict(img, conf=0.1, verbose=False)
-        print("[DEBUG] Jumlah deteksi:", len(results[0].boxes))
         if results and len(results[0].boxes) > 0:
             annotated = results[0].plot()
         else:
-            annotated = img  # Jika tidak ada deteksi, tampilkan frame asli
-
-        # Kembalikan frame
+            annotated = img
         return av.VideoFrame.from_ndarray(annotated.astype(np.uint8), format="bgr24")
 
 # ====== MODE: GAMBAR ======
-if option == "Gambar":
-    uploaded_image = st.file_uploader("Upload gambar (jpg/jpeg/png)", type=["jpg", "jpeg", "png"])
-    if uploaded_image is not None:
+if option.startswith("📷"):
+    st.subheader("📷 Deteksi Objek dari Gambar")
+    st.write("Unggah gambar berformat `.jpg`, `.jpeg`, atau `.png` lalu hasil deteksi akan ditampilkan.")
+
+    uploaded_image = st.file_uploader("Upload Gambar", type=["jpg", "jpeg", "png"])
+    if uploaded_image:
         image = Image.open(uploaded_image)
-        st.image(image, caption="Gambar yang diupload", use_container_width=True)
-        result_image = predict_image(np.array(image))
-        st.image(result_image, caption="Hasil Deteksi", use_container_width=True)
+        st.image(image, caption="📥 Gambar yang diupload", use_container_width=True)
+        with st.spinner("🔍 Mendeteksi objek..."):
+            result_image = predict_image(np.array(image))
+        st.image(result_image, caption="🎯 Hasil Deteksi", use_container_width=True)
 
 # ====== MODE: VIDEO ======
-elif option == "Video":
-    uploaded_video = st.file_uploader("Upload video (mp4/mov)", type=["mp4", "mov"])
-    if uploaded_video is not None:
+elif option.startswith("🎞️"):
+    st.subheader("🎞️ Deteksi Objek dari Video")
+    st.write("Unggah file video berformat `.mp4` atau `.mov`, kemudian unduh hasilnya setelah diproses.")
+
+    uploaded_video = st.file_uploader("Upload Video", type=["mp4", "mov"])
+    if uploaded_video:
         tfile = tempfile.NamedTemporaryFile(delete=False)
         tfile.write(uploaded_video.read())
         tfile.flush()
         tfile.close()
 
-        st.video(tfile.name)  # Menampilkan video asli (optional)
+        st.video(tfile.name, format="video/mp4")
 
-        with st.spinner("Melakukan deteksi pada video..."):
+        with st.spinner("⏳ Melakukan deteksi pada video..."):
             result_video_path = predict_video(tfile.name)
-            st.success("Deteksi selesai!")
 
-        # Baca kembali file hasil
         with open(result_video_path, "rb") as f:
             video_bytes = f.read()
 
+        st.success("✅ Deteksi selesai!")
         st.download_button(
             label="⬇️ Download Video Hasil Deteksi",
             data=video_bytes,
@@ -127,18 +125,15 @@ elif option == "Video":
             mime="video/mp4"
         )
 
-
 # ====== MODE: WEBCAM ======
-elif option == "Webcam":
-    st.subheader("Deteksi Objek dari Webcam (Real-time)")
+elif option.startswith("🎥"):
+    st.subheader("🎥 Deteksi Objek dari Webcam (Real-time)")
     st.markdown("Klik 'Allow' saat browser meminta izin webcam.")
 
-    # Konfigurasi RTC (penting untuk deployment/non-local)
     rtc_config = {
         "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
     }
 
-    # Jalankan webrtc streamer
     webrtc_ctx = webrtc_streamer(
         key="yolo-webcam",
         mode=WebRtcMode.SENDRECV,
@@ -148,11 +143,9 @@ elif option == "Webcam":
         async_processing=True,
     )
 
-    # Tambahkan status deteksi
     if webrtc_ctx.video_processor:
-        st.success("Webcam berhasil terhubung dan model YOLO aktif!")
+        st.success("🟢 Webcam aktif dan YOLO berjalan!")
     elif webrtc_ctx.state.playing:
-        st.info("Menginisialisasi webcam...")
+        st.info("⏳ Menginisialisasi webcam...")
     else:
-        st.warning("Webcam belum aktif atau tidak terdeteksi.")
-
+        st.warning("🔴 Webcam belum aktif atau tidak terdeteksi.")
