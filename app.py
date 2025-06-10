@@ -11,7 +11,7 @@ from ultralytics import YOLO
 model = YOLO("best.pt")
 
 # ==== CSS dan Layout ====
-st.set_page_config(page_title="Mangalyze", layout="wide")
+st.set_page_config(page_title="Deteksi Helm Pengendara Motor", layout="wide")
 
 st.markdown("""
     <style>
@@ -22,7 +22,7 @@ st.markdown("""
             padding: 120px 30px;
             border-radius: 8px;
             text-align: center;
-            color: white;
+            color: black;
         }
         .hero h1 {
             font-size: 3em;
@@ -34,7 +34,7 @@ st.markdown("""
             margin-bottom: 2rem;
         }
         .hero button {
-            background-color: white;
+            background-color: black;
             color: #10b981;
             padding: 0.8em 2em;
             border: none;
@@ -46,7 +46,7 @@ st.markdown("""
             background-color: #e2e8f0;
         }
         .navbar {
-            background-color: white;
+            background-color: #8a000d;
             padding: 1rem 2rem;
             border-bottom: 1px solid #e5e7eb;
             display: flex;
@@ -56,26 +56,25 @@ st.markdown("""
         .navbar a {
             margin: 0 1rem;
             text-decoration: none;
-            color: #374151;
+            color: white;
             font-weight: 500;
         }
         .navbar a:hover {
-            color: #10b981;
+            color: #e2e8f0;
         }
     </style>
 
     <div class="navbar">
-        <div style="font-weight: bold; font-size: 1.2rem;">Mangalyze.</div>
+        <div style="font-weight: bold; font-size: 1.2rem;">Deteksi Helm</div>
         <div>
             <a href="#beranda">Beranda</a>
-            <a href="#jenis-penyakit">Jenis Penyakit</a>
             <a href="#prediksi">Prediksi</a>
         </div>
     </div>
 
     <div class="hero" id="beranda">
-        <h1>Deteksi Penyakit Daun Mangga</h1>
-        <p>Gunakan AI untuk mengidentifikasi penyakit pada daun mangga dengan cepat dan akurat.</p>
+        <h1>Deteksi Penggunaan Helm Pada Pengendara Motor</h1>
+        <p>AI untuk mendeteksi penggunaan helm pada pengendara motor demi keamanan bersama dengan cepat dan canggih.</p>
         <a href="#prediksi"><button>Mulai Deteksi</button></a>
     </div>
 """, unsafe_allow_html=True)
@@ -143,7 +142,7 @@ class YOLOProcessor(VideoProcessorBase):
 
 # ==== Bagian Prediksi ====
 st.markdown("<div id='prediksi'></div>", unsafe_allow_html=True)
-st.header("Prediksi Penyakit Daun Mangga")
+st.header("Prediksi Penggunaan Helm Pada Pengendara Motor")
 
 option = st.radio("Pilih metode input:", ["Gambar", "Video", "Webcam"], horizontal=True)
 
