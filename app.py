@@ -137,6 +137,7 @@ st.markdown("""
         }
 
         .nav-right {
+            margin-right: 2rem;
             display: flex;
             align-items: center;
             gap: 1rem;
@@ -179,7 +180,14 @@ st.markdown("""
         .dropdown:hover .dropdown-content {
             display: block;
         }
-
+        .prediksi-container {
+            max-width: 700px;
+            margin: 2rem auto;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
     </style>
 
     <script>
@@ -293,8 +301,9 @@ class YOLOProcessor(VideoProcessorBase):
 
 # ==== Bagian Prediksi ====
 st.markdown("<div id='prediksi'></div>", unsafe_allow_html=True)
+st.markdown('<div class="prediksi-container">', unsafe_allow_html=True)
 st.header("Prediksi Penggunaan Helm Pada Pengendara Motor")
-
+st.header(f"Prediksi: {mode}")
 #option = st.radio("Pilih metode input:", ["Gambar", "Video", "Webcam"], horizontal=True)
 
 if option == "Gambar":
