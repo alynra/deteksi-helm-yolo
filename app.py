@@ -244,6 +244,7 @@ st.markdown("""
         #prediksi {
             padding: 50px 60px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             gap: 2rem;
