@@ -78,7 +78,7 @@ st.markdown("""
             padding: 100px 60px;
             background-color: white;
             border-radius: 0;
-            margin-top: 80px;
+            margin: 0;
             gap: 2rem;
         }
         
@@ -237,17 +237,17 @@ st.markdown("""
             box-shadow: none;
             margin: 0 auto;
             max-width: 100%;
-            margin-bottom: 200px;
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
         #prediksi {
-            padding: 100px 60px;
+            padding: 50px 60px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 2rem;
+            margin: 0 auto;
         }
         #prediksi h1 {
             font-size: 2em;
