@@ -289,7 +289,9 @@ st.markdown("""
         <div class="hero-left">
             <h1>Deteksi Penggunaan Helm<br>Pada Pengendara Motor</h1>
             <p>AI untuk mendeteksi penggunaan helm demi keamanan berkendara dengan cepat dan akurat.</p>
-            <button onclick="location.href='#prediksi-anchor'">Mulai Deteksi</button>
+            <a href="#prediksi-anchor">
+              <button>Mulai Deteksi</button>
+            </a>
         </div>
         <div class="hero-right">
             <img src="https://raw.githubusercontent.com/alynra/deteksi-helm-yolo/main/animasi.jpg" alt="Animasi Ilustrasi">
@@ -388,7 +390,7 @@ class YOLOProcessor(VideoProcessorBase):
         return av.VideoFrame.from_ndarray(annotated.astype(np.uint8), format="bgr24")
 
 # ==== Bagian Prediksi ====
-st.markdown("<div id='prediksi' style='min-height: 10vh;'></div>", unsafe_allow_html=True)
+st.markdown("<div id='prediksi' style='min-height: 20vh;'></div>", unsafe_allow_html=True)
 st.markdown('<div id="prediksi-anchor"></div>', unsafe_allow_html=True)
 col_left, col_center, col_right = st.columns([0.5, 3, 0.5])
 
