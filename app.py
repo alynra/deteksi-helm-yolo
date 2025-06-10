@@ -394,7 +394,12 @@ class YOLOProcessor(VideoProcessorBase):
         return av.VideoFrame.from_ndarray(annotated.astype(np.uint8), format="bgr24")
 
 # ==== Bagian Prediksi ====
-st.markdown("<div id='prediksi' style='min-height: 30vh; text-align: center;'><h1>Prediksi Penggunaan Helm Pada Pengendara Motor</h1> <br> <p>Anda dapat memprediksi motor, pengguna helm dan non-helm dari gambar, video ataupun secara real-time menggunakan webcam di sini.</p> <br></div>", unsafe_allow_html=True)
+st.markdown("""
+<div id='prediksi' style='min-height: 30vh; text-align: center; padding: 20px;'>
+    <h1 style='margin-bottom: 0.5em;'>Prediksi Penggunaan Helm Pada Pengendara Motor</h1>
+    <p style='margin-top: 0; font-size: 1.1rem; color: #444;'>Anda dapat memprediksi motor, pengguna helm dan non-helm dari gambar, video ataupun secara real-time menggunakan webcam di sini.</p>
+</div>
+""", unsafe_allow_html=True)
 st.markdown('<div id="prediksi-anchor"></div>', unsafe_allow_html=True)
 col_left, col_center, col_right = st.columns([1, 3, 1])
 
