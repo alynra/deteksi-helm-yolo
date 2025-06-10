@@ -188,16 +188,17 @@ st.markdown("""
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
         }
-
+        div[id="prediksi-anchor"] + div {
+            max-width: 700px;
+            margin: 2rem auto;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
     </style>
 
     <script>
-        function setMode(mode) {
-            const queryParams = new URLSearchParams(window.location.search);
-            queryParams.set("mode", mode);
-            const newUrl = window.location.pathname + '?' + queryParams.toString() + '#prediksi';
-            window.location.href = newUrl;
-        }
         function scrollToPrediksi() {
             const el = document.getElementById("prediksi");
             if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -302,9 +303,8 @@ class YOLOProcessor(VideoProcessorBase):
 
 # ==== Bagian Prediksi ====
 st.markdown("<div id='prediksi'></div>", unsafe_allow_html=True)
-
+st.markdown('<div id="prediksi-anchor"></div>', unsafe_allow_html=True)
 with st.container():
-    st.markdown('<div class="prediksi-container">', unsafe_allow_html=True)
     st.header("Prediksi Penggunaan Helm Pada Pengendara Motor")
     
     #option = st.radio("Pilih metode input:", ["Gambar", "Video", "Webcam"], horizontal=True)
