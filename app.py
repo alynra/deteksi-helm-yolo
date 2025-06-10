@@ -184,12 +184,10 @@ st.markdown("""
 
     <script>
         function setMode(mode) {
-            const url = new URL(window.location.href);
-            url.searchParams.set("mode", mode);
-            url.hash = "prediksi";
-            window.history.replaceState({}, "", url);
-            // Trigger perubahan agar Streamlit membaca ulang URL
-            window.location.reload();
+            const queryParams = new URLSearchParams(window.location.search);
+            queryParams.set("mode", mode);
+            const newUrl = window.location.pathname + '?' + queryParams.toString() + '#prediksi';
+            window.location.href = newUrl;
         }
         function scrollToPrediksi() {
             const el = document.getElementById("prediksi");
@@ -226,9 +224,8 @@ if "mode" not in st.session_state:
 
 query_params = st.query_params
 if "mode" in query_params:
-    mode = query_params["mode"]
-    if mode != st.session_state["mode"]:
-        st.session_state["mode"] = mode
+    st.session_state["mode"] = query_params["mode"]
+
 
     
 option = st.session_state["mode"]
