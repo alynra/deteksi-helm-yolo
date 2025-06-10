@@ -15,6 +15,37 @@ st.set_page_config(page_title="Deteksi Helm Pengendara Motor", layout="wide")
 
 st.markdown("""
     <style>
+        /* Agar semua elemen box menggunakan sistem ukuran fleksibel */
+    *, *::before, *::after {
+        box-sizing: border-box;
+    }
+
+    /* Navbar dan hero section full width dan responsif */
+    .navbar, .hero {
+        max-width: 100%;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    /* Pastikan tombol tidak overflow */
+    .hero button {
+        max-width: 90%;
+        width: auto;
+    }
+
+    /* Responsif untuk tampilan mobile */
+    @media screen and (max-width: 768px) {
+        .hero h1 {
+            font-size: 1.8em;
+        }
+        .hero p {
+            font-size: 1em;
+        }
+        .navbar {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
         .hero {
             background-image: url('https://images.unsplash.com/photo-1571867424485-3694642b2f73'); 
             background-size: cover;
@@ -67,7 +98,7 @@ st.markdown("""
 
     <div class="navbar">
         <div style="font-weight: bold; font-size: 1.2rem;">Deteksi Helm</div>
-        <div>
+        <div style="display: flex; flex-wrap: wrap;">
             <a href="#beranda">Beranda</a>
             <a href="#prediksi">Prediksi</a>
         </div>
