@@ -70,15 +70,64 @@ st.markdown("""
             }
         }
         .hero {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            padding: 100px 60px;
+            background-color: white;
+            border-radius: 0;
             margin-top: 80px;
-            background-image: url('https://images.unsplash.com/photo-1571867424485-3694642b2f73'); 
-            background-size: cover;
-            background-position: center;
-            padding: 120px 30px;
-            border-radius: 8px;
-            text-align: center;
-            color: black;
+            gap: 2rem;
         }
+        
+        .hero-left {
+            flex: 1;
+            max-width: 600px;
+        }
+        
+        .hero-left h1 {
+            font-size: 3.2em;
+            font-weight: bold;
+            color: #222;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        
+        .hero-left p {
+            font-size: 1.2em;
+            color: #444;
+            margin-bottom: 2rem;
+        }
+        
+        .hero-left button {
+            background-color: #c80114;
+            color: white;
+            padding: 0.8em 2em;
+            border: none;
+            font-size: 1em;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        
+        .hero-left button:hover {
+            background-color: #e2e8f0;
+            color: #111;
+        }
+        
+        .hero-right {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .hero-right img {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+        }
+
         .hero h1 {
             font-size: 3em;
             font-weight: bold;
@@ -224,10 +273,16 @@ st.markdown("""
     
 
     <div class="hero" id="beranda">
-        <h1>Deteksi Penggunaan Helm Pada Pengendara Motor</h1>
-        <p>AI untuk mendeteksi penggunaan helm pada pengendara motor demi keamanan bersama dengan cepat dan canggih.</p>
-        <button onclick="scrollToPrediksi()">Mulai Deteksi</button>
+        <div class="hero-left">
+            <h1>Deteksi Penggunaan Helm<br>Pada Pengendara Motor</h1>
+            <p>AI untuk mendeteksi penggunaan helm demi keamanan berkendara dengan cepat dan akurat.</p>
+            <button onclick="scrollToPrediksi()">Mulai Deteksi</button>
+        </div>
+        <div class="hero-right">
+            <img src="https://raw.githubusercontent.com/alynra/deteksi-helm-yolo/main/animasi.jpg" alt="Animasi Ilustrasi">
+        </div>
     </div>
+
 """, unsafe_allow_html=True)
 
 if "mode" not in st.session_state:
