@@ -71,6 +71,9 @@ st.markdown("""
         }
         .hero {
             margin-top: 80px;
+            background-image: url('https://images.unsplash.com/photo-1571867424485-3694642b2f73'); 
+            background-size: cover;
+            background-position: center;
             padding: 120px 30px;
             border-radius: 8px;
             text-align: center;
@@ -177,7 +180,22 @@ st.markdown("""
         .dropdown:hover .dropdown-content {
             display: block;
         }
-        
+        .prediksi-container {
+            max-width: 700px;
+            margin: 2rem auto;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+        div[id="prediksi-anchor"] + div {
+            max-width: 700px;
+            margin: 2rem auto;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
     </style>
 
     <script>
@@ -285,64 +303,73 @@ class YOLOProcessor(VideoProcessorBase):
 
 # ==== Bagian Prediksi ====
 st.markdown("<div id='prediksi'></div>", unsafe_allow_html=True)
+st.markdown('<div id="prediksi-anchor"></div>', unsafe_allow_html=True)
 col_left, col_center, col_right = st.columns([1, 2, 1])
 
 with col_center:
-    st.header("Prediksi Penggunaan Helm Pada Pengendara Motor")
+    with st.container():
+        st.markdown("""
+            <div style="background-color: white; padding: 2rem; border-radius: 12px;
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.06);">
+        """, unsafe_allow_html=True)
+        st.header("Prediksi Penggunaan Helm Pada Pengendara Motor")
+        
         #option = st.radio("Pilih metode input:", ["Gambar", "Video", "Webcam"], horizontal=True)
         
-    if option == "Gambar":
-        uploaded_image = st.file_uploader("Upload gambar (jpg/jpeg/png)", type=["jpg", "jpeg", "png"])
-        if uploaded_image is not None:
-            image = Image.open(uploaded_image)
-            st.image(image, caption="Gambar yang diupload", use_container_width=True)
-            result_image = predict_image(np.array(image))
-            st.image(result_image, caption="Hasil Deteksi", use_container_width=True)
+        if option == "Gambar":
+            uploaded_image = st.file_uploader("Upload gambar (jpg/jpeg/png)", type=["jpg", "jpeg", "png"])
+            if uploaded_image is not None:
+                image = Image.open(uploaded_image)
+                st.image(image, caption="Gambar yang diupload", use_container_width=True)
+                result_image = predict_image(np.array(image))
+                st.image(result_image, caption="Hasil Deteksi", use_container_width=True)
         
-    elif option == "Video":
-        uploaded_video = st.file_uploader("Upload video (mp4/mov)", type=["mp4", "mov"])
-        if uploaded_video is not None:
-            tfile = tempfile.NamedTemporaryFile(delete=False)
-            tfile.write(uploaded_video.read())
-            tfile.flush()
-            tfile.close()
+        elif option == "Video":
+            uploaded_video = st.file_uploader("Upload video (mp4/mov)", type=["mp4", "mov"])
+            if uploaded_video is not None:
+                tfile = tempfile.NamedTemporaryFile(delete=False)
+                tfile.write(uploaded_video.read())
+                tfile.flush()
+                tfile.close()
         
-            st.video(tfile.name)
+                st.video(tfile.name)
         
-            with st.spinner("Melakukan deteksi pada video..."):
-                result_video_path = predict_video(tfile.name)
-                st.success("Deteksi selesai!")
+                with st.spinner("Melakukan deteksi pada video..."):
+                    result_video_path = predict_video(tfile.name)
+                    st.success("Deteksi selesai!")
         
-            with open(result_video_path, "rb") as f:
-                video_bytes = f.read()
+                with open(result_video_path, "rb") as f:
+                    video_bytes = f.read()
         
-            st.download_button(
-                label="⬇ Download Video Hasil Deteksi",
-                data=video_bytes,
-                file_name="video_deteksi_yolo.mp4",
-                mime="video/mp4"
+                st.download_button(
+                    label="⬇ Download Video Hasil Deteksi",
+                    data=video_bytes,
+                    file_name="video_deteksi_yolo.mp4",
+                    mime="video/mp4"
+                )
+        
+        elif option == "Webcam":
+            st.subheader("Deteksi Objek dari Webcam (Real-time)")
+            st.markdown("Klik 'Allow' saat browser meminta izin webcam.")
+        
+            rtc_config = {
+                "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
+            }
+        
+            webrtc_ctx = webrtc_streamer(
+                key="yolo-webcam",
+                mode=WebRtcMode.SENDRECV,
+                video_processor_factory=YOLOProcessor,
+                media_stream_constraints={"video": True, "audio": False},
+                rtc_configuration=rtc_config,
+                async_processing=True,
             )
-    elif option == "Webcam":
-        st.subheader("Deteksi Objek dari Webcam (Real-time)")
-        st.markdown("Klik 'Allow' saat browser meminta izin webcam.")
         
-        rtc_config = {
-            "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
-        }
+            if webrtc_ctx.video_processor:
+                st.success("Webcam berhasil terhubung dan model YOLO aktif!")
+            elif webrtc_ctx.state.playing:
+                st.info("Menginisialisasi webcam...")
+            else:
+                st.warning("Webcam belum aktif atau tidak terdeteksi.")
         
-        webrtc_ctx = webrtc_streamer(
-            key="yolo-webcam",
-            mode=WebRtcMode.SENDRECV,
-            video_processor_factory=YOLOProcessor,
-            media_stream_constraints={"video": True, "audio": False},
-            rtc_configuration=rtc_config,
-            async_processing=True,
-        )
-        
-        if webrtc_ctx.video_processor:
-            st.success("Webcam berhasil terhubung dan model YOLO aktif!")
-        elif webrtc_ctx.state.playing:
-            st.info("Menginisialisasi webcam...")
-        else:
-            st.warning("Webcam belum aktif atau tidak terdeteksi.")
-        
+        st.markdown('</div>', unsafe_allow_html=True)
