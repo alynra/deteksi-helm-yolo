@@ -251,7 +251,6 @@ st.markdown("""
             justify-content: center;
         }
         #prediksi {
-            min-height: 100vh;
             padding-top: 0;
             display: flex;
             align-items: center;
