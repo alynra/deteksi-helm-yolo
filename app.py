@@ -188,7 +188,8 @@ st.markdown("""
             url.searchParams.set("mode", mode);
             url.hash = "prediksi";
             window.history.replaceState({}, "", url);
-            window.dispatchEvent(new Event('popstate')); 
+            // Trigger perubahan agar Streamlit membaca ulang URL
+            window.location.reload();
         }
         function scrollToPrediksi() {
             const el = document.getElementById("prediksi");
