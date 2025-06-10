@@ -71,9 +71,6 @@ st.markdown("""
         }
         .hero {
             margin-top: 80px;
-            background-image: url('https://images.unsplash.com/photo-1571867424485-3694642b2f73'); 
-            background-size: cover;
-            background-position: center;
             padding: 120px 30px;
             border-radius: 8px;
             text-align: center;
@@ -180,22 +177,7 @@ st.markdown("""
         .dropdown:hover .dropdown-content {
             display: block;
         }
-        #prediksi-wrapper {
-            background-color: #ffffff; /* ubah warna di sini jika perlu */
-            padding: 2rem;
-            border-radius: 12px;
-            max-width: 700px;
-            margin: 2rem auto;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-        }
-        div[id="prediksi-anchor"] + div {
-            max-width: 700px;
-            margin: 2rem auto;
-            background-color: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-        }
+        
     </style>
 
     <script>
@@ -303,12 +285,10 @@ class YOLOProcessor(VideoProcessorBase):
 
 # ==== Bagian Prediksi ====
 st.markdown("<div id='prediksi'></div>", unsafe_allow_html=True)
-st.markdown('<div id="prediksi-anchor"></div>', unsafe_allow_html=True)
 col_left, col_center, col_right = st.columns([1, 2, 1])
 
 with col_center:
-    st.markdown('<div id="prediksi-wrapper">', unsafe_allow_html=True)
-        
+    st.header("Prediksi Penggunaan Helm Pada Pengendara Motor")
         #option = st.radio("Pilih metode input:", ["Gambar", "Video", "Webcam"], horizontal=True)
         
     if option == "Gambar":
@@ -366,4 +346,3 @@ with col_center:
         else:
             st.warning("Webcam belum aktif atau tidak terdeteksi.")
         
-    st.markdown('</div>', unsafe_allow_html=True)
