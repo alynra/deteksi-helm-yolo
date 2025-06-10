@@ -331,15 +331,19 @@ with col_center:
         
         if option == "Gambar":
             uploaded_image = st.file_uploader("Upload gambar (jpg/jpeg/png)", type=["jpg", "jpeg", "png"])
+            
             if uploaded_image is not None:
                 image = Image.open(uploaded_image)
+                image_np = np.array(image)
+        
                 st.image(image, caption="Gambar yang diupload", use_container_width=True)
-    
-            with st.spinner("Melakukan deteksi..."):
-                result_image = predict_image(np.array(image))
-                st.success("Deteksi selesai!")
-    
-            st.image(result_image, caption="Hasil Deteksi", use_container_width=True)
+        
+                with st.spinner("Melakukan deteksi..."):
+                    result_image = predict_image(image_np)
+                    st.success("Deteksi selesai!")
+        
+                st.image(result_image, caption="Hasil Deteksi", use_container_width=True)
+
         elif option == "Video":
             uploaded_video = st.file_uploader("Upload video (mp4/mov)", type=["mp4", "mov"])
             if uploaded_video is not None:
