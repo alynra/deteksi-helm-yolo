@@ -15,11 +15,12 @@ st.set_page_config(page_title="Deteksi Helm Pengendara Motor", layout="wide")
 
 st.markdown("""
     <style>
-            /* Agar semua elemen box menggunakan sistem ukuran fleksibel */
-        *, *::before, *::after {
-            box-sizing: border-box;
+
+        html, body {
+            margin: 0 !important;
+            padding: 0 !important;
         }
-        
+
         section.main > div.block-container {
                 padding-top: 0 !important;
                 margin-top: 0 !important;
@@ -34,7 +35,13 @@ st.markdown("""
                 max-width: 100% !important;
             }
         
-        /* Navbar dan hero section full width dan responsif */
+            
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        
+        
+        
         .navbar, .hero {
             max-width: 100%;
             width: 100%;
