@@ -303,7 +303,7 @@ class YOLOProcessor(VideoProcessorBase):
 st.markdown("<div id='prediksi'></div>", unsafe_allow_html=True)
 st.markdown('<div class="prediksi-container">', unsafe_allow_html=True)
 st.header("Prediksi Penggunaan Helm Pada Pengendara Motor")
-st.header(f"Prediksi: {mode}")
+
 #option = st.radio("Pilih metode input:", ["Gambar", "Video", "Webcam"], horizontal=True)
 
 if option == "Gambar":
