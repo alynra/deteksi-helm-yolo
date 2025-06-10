@@ -241,8 +241,25 @@ option = st.session_state["mode"]
 
 # ===== Fungsi Prediksi Gambar =====
 def predict_image(image):
+    progress_text = st.empty()
+    progress_bar = st.progress(0)
+    
+    # Simulasi proses bertahap (karena hanya 1 gambar, progress disimulasikan)
+    progress_text.text("Memuat gambar...")
+    progress_bar.progress(10)
+    
+    # Proses deteksi
     results = model.predict(image)
+    progress_text.text("Melakukan deteksi...")
+    progress_bar.progress(70)
+    
     result_img = results[0].plot()
+    progress_bar.progress(100)
+    progress_text.text("Selesai!")
+    
+    # Bersihkan progress bar
+    progress_bar.empty()
+
     return result_img
 
 # ===== Fungsi Prediksi Video =====
@@ -317,9 +334,12 @@ with col_center:
             if uploaded_image is not None:
                 image = Image.open(uploaded_image)
                 st.image(image, caption="Gambar yang diupload", use_container_width=True)
+    
+            with st.spinner("Melakukan deteksi..."):
                 result_image = predict_image(np.array(image))
-                st.image(result_image, caption="Hasil Deteksi", use_container_width=True)
-        
+                st.success("Deteksi selesai!")
+    
+            st.image(result_image, caption="Hasil Deteksi", use_container_width=True)
         elif option == "Video":
             uploaded_video = st.file_uploader("Upload video (mp4/mov)", type=["mp4", "mov"])
             if uploaded_video is not None:
