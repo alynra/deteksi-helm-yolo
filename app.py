@@ -177,6 +177,10 @@ st.markdown("""
             window.history.replaceState({}, "", url);
             window.dispatchEvent(new Event('popstate')); 
         }
+        function scrollToPrediksi() {
+            const el = document.getElementById("prediksi");
+            if (el) el.scrollIntoView({ behavior: "smooth" });
+        }
     </script>
 
     
@@ -185,7 +189,7 @@ st.markdown("""
         <div class="nav-right">
             <a href="#beranda">Beranda</a>
                 <div class="dropdown">
-                  <a class="dropbtn">Prediksi ▾</a>
+                  <div class="dropbtn">Prediksi ▾</div>
                   <div class="dropdown-content">
                     <div class="nav-item" onclick="setMode('Gambar')">Gambar</div>
                     <div class="nav-item" onclick="setMode('Video')">Video</div>
@@ -199,7 +203,7 @@ st.markdown("""
     <div class="hero" id="beranda">
         <h1>Deteksi Penggunaan Helm Pada Pengendara Motor</h1>
         <p>AI untuk mendeteksi penggunaan helm pada pengendara motor demi keamanan bersama dengan cepat dan canggih.</p>
-        <a href="#prediksi"><button>Mulai Deteksi</button></a>
+        <button onclick="scrollToPrediksi()">Mulai Deteksi</button>
     </div>
 """, unsafe_allow_html=True)
 
