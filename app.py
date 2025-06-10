@@ -189,12 +189,11 @@ st.markdown("""
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
         }
         div[id="prediksi-anchor"] + div {
-            max-width: 700px;
-            margin: 2rem auto;
-            background-color: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            background-color: transparent;
+            padding: 0;
+            box-shadow: none;
+            margin: 0 auto;
+            max-width: 100%;
         }
     </style>
 
@@ -304,7 +303,7 @@ class YOLOProcessor(VideoProcessorBase):
 # ==== Bagian Prediksi ====
 st.markdown("<div id='prediksi'></div>", unsafe_allow_html=True)
 st.markdown('<div id="prediksi-anchor"></div>', unsafe_allow_html=True)
-col_left, col_center, col_right = st.columns([1, 2, 1])
+col_left, col_center, col_right = st.columns([0.5, 3, 0.5])
 
 with col_center:
     with st.container():
