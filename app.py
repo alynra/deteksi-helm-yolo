@@ -378,9 +378,10 @@ class YOLOProcessor(VideoProcessorBase):
 
 # ==== Bagian Prediksi ====
 st.markdown("<div id='prediksi' style='min-height: 30vh;'></div>", unsafe_allow_html=True)
+st.markdown('<h1>Deteksi Penggunaan Helm Pada Pengendara Motor</h1> <br> <br>', unsafe_allow_html=True)
 st.markdown('<div id="prediksi-anchor"></div>', unsafe_allow_html=True)
 col_left, col_center, col_right = st.columns([0.5, 3, 0.5])
-st.markdown('<h1>Deteksi Penggunaan Helm Pada Pengendara Motor</h1> <br> <br>', unsafe_allow_html=True)
+
 with col_center:
     with st.container():
         
