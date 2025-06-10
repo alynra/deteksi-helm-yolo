@@ -310,7 +310,7 @@ def predict_image(image):
     progress_bar.progress(10)
     
     # Proses deteksi
-    results = model.predict(image)
+    results = model.predict(image, imgsz=640)
     progress_text.text("Melakukan deteksi...")
     progress_bar.progress(70)
     
@@ -367,6 +367,14 @@ def predict_video(video_path):
 
     return temp_output.name
 
+def resize_image(image_pil, max_size=640):
+    """Resize agar sisi terpanjang = max_size, menjaga rasio"""
+    w, h = image_pil.size
+    if max(w, h) > max_size:
+        ratio = max_size / float(max(w, h))
+        new_size = (int(w * ratio), int(h * ratio))
+        image_pil = image_pil.resize(new_size, Image.ANTIALIAS)
+    return image_pil
 # ======= Kelas Webcam (streamlit-webrtc) =====
 class YOLOProcessor(VideoProcessorBase):
     def recv(self, frame: av.VideoFrame) -> av.VideoFrame:
@@ -395,6 +403,7 @@ with col_center:
             
             if uploaded_image is not None:
                 image = Image.open(uploaded_image)
+                image = resize_image(image, max_size=640)
                 image_np = np.array(image)
         
                 st.image(image, caption="Gambar yang diupload", use_container_width=True)
