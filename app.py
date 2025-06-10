@@ -34,8 +34,8 @@ st.markdown("""
             margin-bottom: 2rem;
         }
         .hero button {
-            background-color: black;
-            color: #10b981;
+            background-color: #c80114;
+            color: white;
             padding: 0.8em 2em;
             border: none;
             font-size: 1em;
@@ -52,6 +52,7 @@ st.markdown("""
             display: flex;
             justify-content: space-between;
             align-items: center;
+            color: white;
         }
         .navbar a {
             margin: 0 1rem;
