@@ -367,13 +367,16 @@ def predict_video(video_path):
 
     return temp_output.name
 
-def resize_image(image_pil, max_size=640):
-    """Resize agar sisi terpanjang = max_size, menjaga rasio"""
+def resize_image(image_pil, max_size=1024):
     w, h = image_pil.size
     if max(w, h) > max_size:
         ratio = max_size / float(max(w, h))
         new_size = (int(w * ratio), int(h * ratio))
-        image_pil = image_pil.resize(new_size, Image.ANTIALIAS)
+        try:
+            resample_mode = Image.Resampling.LANCZOS
+        except AttributeError:
+            resample_mode = Image.LANCZOS  # kompatibel dengan Pillow < 10
+        image_pil = image_pil.resize(new_size, resample_mode)
     return image_pil
 # ======= Kelas Webcam (streamlit-webrtc) =====
 class YOLOProcessor(VideoProcessorBase):
