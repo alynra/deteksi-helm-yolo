@@ -21,6 +21,8 @@ st.markdown("""
         }
         
         section.main > div.block-container {
+                padding-top: 0 !important;
+                margin-top: 0 !important;
                 padding: 0rem;
                 max-width: 100%;
                 width: 100%;
@@ -59,6 +61,7 @@ st.markdown("""
             }
         }
         .hero {
+            margin-top: 80px;
             background-image: url('https://images.unsplash.com/photo-1571867424485-3694642b2f73'); 
             background-size: cover;
             background-position: center;
