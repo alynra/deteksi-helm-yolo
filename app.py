@@ -89,6 +89,11 @@ st.markdown("""
             background-color: #e2e8f0;
         }
         .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+            width: 100%;
             background-color: #8a000d;
             padding: 1rem 2rem;
             border-bottom: 1px solid #e5e7eb;
