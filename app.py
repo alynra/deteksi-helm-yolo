@@ -398,7 +398,7 @@ class YOLOProcessor(VideoProcessorBase):
 st.markdown("""
 <div id='prediksi' style='min-height: 30vh; text-align: center; padding: 20px;'>
     <h1 style='margin-bottom: 0.5em;'>Prediksi Penggunaan Helm Pada Pengendara Motor</h1>
-    <p style='margin-top: 0; font-size: 1.1rem; color: #444;'>Anda dapat memprediksi motor, pengguna helm dan non-helm dari gambar, video ataupun secara real-time menggunakan webcam di sini.</p>
+    <p style='margin-top: 0; font-size: 1.1rem; color: #444;'>Anda dapat memprediksi motor, pengguna helm dan non-helm dari <br>gambar, video ataupun secara real-time menggunakan webcam di sini.</p>
 </div>
 """, unsafe_allow_html=True)
 st.markdown('<div id="prediksi-anchor"></div>', unsafe_allow_html=True)
