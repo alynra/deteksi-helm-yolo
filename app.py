@@ -7,16 +7,78 @@ import numpy as np
 from PIL import Image
 from ultralytics import YOLO
 
-# Load model YOLO
-model_path = "best.pt"  # Ganti dengan custom model jika perlu
-model = YOLO(model_path)
+# Load model
+model = YOLO("best.pt")
 
-# Judul aplikasi
-st.title("YOLO Object Detection: Gambar, Video, Webcam")
-st.write("Deteksi objek menggunakan model YOLO dari gambar, video, atau webcam secara real-time.")
+# ==== CSS dan Layout ====
+st.set_page_config(page_title="Mangalyze", layout="wide")
 
-# Sidebar: Pilihan mode input
-#option = st.sidebar.radio("Pilih metode input:", ("Gambar", "Video", "Webcam"))
+st.markdown("""
+    <style>
+        .hero {
+            background-image: url('https://images.unsplash.com/photo-1571867424485-3694642b2f73'); 
+            background-size: cover;
+            background-position: center;
+            padding: 120px 30px;
+            border-radius: 8px;
+            text-align: center;
+            color: white;
+        }
+        .hero h1 {
+            font-size: 3em;
+            font-weight: bold;
+        }
+        .hero p {
+            font-size: 1.2em;
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+        }
+        .hero button {
+            background-color: white;
+            color: #10b981;
+            padding: 0.8em 2em;
+            border: none;
+            font-size: 1em;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .hero button:hover {
+            background-color: #e2e8f0;
+        }
+        .navbar {
+            background-color: white;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar a {
+            margin: 0 1rem;
+            text-decoration: none;
+            color: #374151;
+            font-weight: 500;
+        }
+        .navbar a:hover {
+            color: #10b981;
+        }
+    </style>
+
+    <div class="navbar">
+        <div style="font-weight: bold; font-size: 1.2rem;">Mangalyze.</div>
+        <div>
+            <a href="#beranda">Beranda</a>
+            <a href="#jenis-penyakit">Jenis Penyakit</a>
+            <a href="#prediksi">Prediksi</a>
+        </div>
+    </div>
+
+    <div class="hero" id="beranda">
+        <h1>Deteksi Penyakit Daun Mangga</h1>
+        <p>Gunakan AI untuk mengidentifikasi penyakit pada daun mangga dengan cepat dan akurat.</p>
+        <a href="#prediksi"><button>Mulai Deteksi</button></a>
+    </div>
+""", unsafe_allow_html=True)
 
 # ===== Fungsi Prediksi Gambar =====
 def predict_image(image):
@@ -32,14 +94,13 @@ def predict_video(video_path):
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     fps = int(cap.get(cv2.CAP_PROP_FPS))
     if fps == 0:
-        fps = 25  # fallback
+        fps = 25
 
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     temp_output = tempfile.NamedTemporaryFile(delete=False, suffix=".mp4")
     out = cv2.VideoWriter(temp_output.name, fourcc, fps, (width, height))
 
-    # Streamlit progress bar
     progress_text = st.empty()
     progress_bar = st.progress(0)
 
@@ -49,12 +110,10 @@ def predict_video(video_path):
         if not success:
             break
 
-        # Proses YOLO
         results = model.predict(frame)
         annotated_frame = results[0].plot()
         out.write(annotated_frame)
 
-        # Update progress
         frame_count += 1
         if total_frames > 0:
             progress = int((frame_count / total_frames) * 100)
@@ -62,10 +121,6 @@ def predict_video(video_path):
             progress_text.text(f"Memproses frame {frame_count} / {total_frames}...")
         else:
             progress_text.text(f"Memproses frame {frame_count}...")
-
-        # Debug ke log terminal
-        if frame_count % 10 == 0:
-            print(f"[DEBUG] Frame ke-{frame_count} diproses")
 
     cap.release()
     out.release()
@@ -75,93 +130,23 @@ def predict_video(video_path):
 
     return temp_output.name
 
-
-
-# ===== Kelas Webcam (streamlit-webrtc) =====
+# ======= Kelas Webcam (streamlit-webrtc) =====
 class YOLOProcessor(VideoProcessorBase):
     def recv(self, frame: av.VideoFrame) -> av.VideoFrame:
         img = frame.to_ndarray(format="bgr24")
-        print("[DEBUG] Menerima frame dari webcam")
         results = model.predict(img, conf=0.1, verbose=False)
-        print("[DEBUG] Jumlah deteksi:", len(results[0].boxes))
         if results and len(results[0].boxes) > 0:
             annotated = results[0].plot()
         else:
-            annotated = img  # Jika tidak ada deteksi, tampilkan frame asli
-
-        # Kembalikan frame
+            annotated = img
         return av.VideoFrame.from_ndarray(annotated.astype(np.uint8), format="bgr24")
 
-if "page" not in st.session_state:
-    st.session_state.page = "Gambar"
+# ==== Bagian Prediksi ====
+st.markdown("<div id='prediksi'></div>", unsafe_allow_html=True)
+st.header("Prediksi Penyakit Daun Mangga")
 
-# Tangkap klik melalui query parameter (?page=...)
-query_params = st.query_params
-if "page" in query_params:
-    st.session_state.page = query_params.get("page", "Gambar")
+option = st.radio("Pilih metode input:", ["Gambar", "Video", "Webcam"], horizontal=True)
 
-# ==== CSS Styling Sidebar ====
-st.markdown("""
-    <style>
-    section[data-testid="stSidebar"] div[data-testid="stVerticalBlock"] {
-        align-items: flex-start;
-        padding-top: 1rem;
-    }
-    .nav-title {
-        font-size: 1.2rem;
-        font-weight: bold;
-        margin-bottom: 1rem;
-        color: #1f2937;
-    }
-    .nav-item {
-        font-size: 1rem;
-        font-weight: 500;
-        padding: 0.6rem 1rem;
-        width: 100%;
-        display: block;
-        color: #374151;
-        border-bottom: 1px solid #e5e7eb;
-        text-decoration: none;    
-        color: inherit;            
-    }
-    .nav-item:hover {
-        background-color: #f3f4f6;
-        color: #111827;
-    }
-    .nav-active {
-        background-color: #e5e7eb;
-        font-weight: bold;
-        color: #5B2EFF;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
-# === Sidebar Navigasi (HTML links only) ===
-st.sidebar.markdown("<div class='nav-title'> Menu Navigasi</div>", unsafe_allow_html=True)
-
-def nav_link(label, icon, page_name):
-    is_active = st.session_state.page == page_name
-    nav_class = "nav-item nav-active" if is_active else "nav-item"
-    url = f"?page={page_name}"
-    st.sidebar.markdown(f"<a href='{url}' target='_self' class='{nav_class}'>{icon} {label}</a>", unsafe_allow_html=True)
-
-# Navigasi menu
-nav_link("Gambar", "🖼️", "Gambar")
-nav_link("Video", "🎞️", "Video")
-nav_link("Webcam", "📷", "Webcam")
-
-# Tombol navigasi
-#if st.sidebar.button("Gambar"):
-#    st.session_state.page = "Gambar"
-#if st.sidebar.button("Video"):
-#    st.session_state.page = "Video"
-#if st.sidebar.button("Webcam"):
-#    st.session_state.page = "Webcam"
-
-# ======= KONTEN BERDASARKAN NAVIGASI =======
-option = st.session_state.page
-
-# ====== MODE: GAMBAR ======
 if option == "Gambar":
     uploaded_image = st.file_uploader("Upload gambar (jpg/jpeg/png)", type=["jpg", "jpeg", "png"])
     if uploaded_image is not None:
@@ -170,7 +155,6 @@ if option == "Gambar":
         result_image = predict_image(np.array(image))
         st.image(result_image, caption="Hasil Deteksi", use_container_width=True)
 
-# ====== MODE: VIDEO ======
 elif option == "Video":
     uploaded_video = st.file_uploader("Upload video (mp4/mov)", type=["mp4", "mov"])
     if uploaded_video is not None:
@@ -179,13 +163,12 @@ elif option == "Video":
         tfile.flush()
         tfile.close()
 
-        st.video(tfile.name)  # Menampilkan video asli (optional)
+        st.video(tfile.name)
 
         with st.spinner("Melakukan deteksi pada video..."):
             result_video_path = predict_video(tfile.name)
             st.success("Deteksi selesai!")
 
-        # Baca kembali file hasil
         with open(result_video_path, "rb") as f:
             video_bytes = f.read()
 
@@ -196,18 +179,14 @@ elif option == "Video":
             mime="video/mp4"
         )
 
-
-# ====== MODE: WEBCAM ======
 elif option == "Webcam":
     st.subheader("Deteksi Objek dari Webcam (Real-time)")
     st.markdown("Klik 'Allow' saat browser meminta izin webcam.")
 
-    # Konfigurasi RTC (penting untuk deployment/non-local)
     rtc_config = {
         "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
     }
 
-    # Jalankan webrtc streamer
     webrtc_ctx = webrtc_streamer(
         key="yolo-webcam",
         mode=WebRtcMode.SENDRECV,
@@ -217,7 +196,6 @@ elif option == "Webcam":
         async_processing=True,
     )
 
-    # Tambahkan status deteksi
     if webrtc_ctx.video_processor:
         st.success("Webcam berhasil terhubung dan model YOLO aktif!")
     elif webrtc_ctx.state.playing:
