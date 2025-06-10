@@ -243,13 +243,14 @@ st.markdown("""
             justify-content: center;
         }
         #prediksi {
-            padding-top: 0;
+            padding: 100px 60px;
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 2rem;
         }
         #prediksi h1 {
-            font-size: 3em;
+            font-size: 2em;
             font-weight: bold;
         }
 
