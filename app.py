@@ -123,6 +123,19 @@ st.markdown("""
         .navbar a:hover {
             color: #e2e8f0;
         }
+
+        .dropdown-content .nav-item {
+            color: #333;
+            padding: 10px 16px;
+            text-decoration: none;
+            display: block;
+            cursor: pointer;
+        }
+        
+        .dropdown-content .nav-item:hover {
+            background-color: #f1f1f1;
+        }
+
         .nav-right {
             display: flex;
             align-items: center;
