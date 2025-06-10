@@ -203,14 +203,14 @@ st.markdown("""
                 <div class="dropdown">
                   <div class="dropbtn">Prediksi ▾</div>
                   <div class="dropdown-content">
-                    <div class="nav-item" onclick="setMode('Gambar')">Gambar</div>
-                    <div class="nav-item" onclick="setMode('Video')">Video</div>
-                    <div class="nav-item" onclick="setMode('Webcam')">Webcam</div>
+                    <a href="?mode=Gambar#prediksi" target="_self">Gambar</a>
+                    <a href="?mode=Video#prediksi" target="_self">Video</a>
+                    <a href="?mode=Webcam#prediksi" target="_self">Webcam</a>
                   </div>
                 </div>
         </div>
-        </div>
     </div>
+    
 
     <div class="hero" id="beranda">
         <h1>Deteksi Penggunaan Helm Pada Pengendara Motor</h1>
