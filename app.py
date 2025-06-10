@@ -407,12 +407,12 @@ with col_center:
             if uploaded_image is not None:
                 image = Image.open(uploaded_image)
                 image = resize_image(image, max_size=640)
-                image_np = np.array(image)
+                #image_np = np.array(image)
         
                 st.image(image, caption="Gambar yang diupload", use_container_width=True)
         
                 with st.spinner("Melakukan deteksi..."):
-                    result_image = predict_image(image_np)
+                    result_image = predict_image(image)
                     st.success("Deteksi selesai!")
         
                 st.image(result_image, caption="Hasil Deteksi", use_container_width=True)
