@@ -15,7 +15,9 @@ st.set_page_config(page_title="Deteksi Helm Pengendara Motor", layout="wide")
 
 st.markdown("""
     <style>
-
+        header[data-testid="stHeader"] {
+            display: none;
+        }
         html, body {
             margin: 0 !important;
             padding: 0 !important;
