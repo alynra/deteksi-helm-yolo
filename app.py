@@ -254,7 +254,11 @@ st.markdown("""
             font-weight: bold;
             text-align: center;
         }
-
+        #prediksi p {
+            font-size: 1.2em;
+            margin-top: 1rem;
+            text-align: center;
+        }
     </style>
 
     
@@ -390,7 +394,7 @@ class YOLOProcessor(VideoProcessorBase):
         return av.VideoFrame.from_ndarray(annotated.astype(np.uint8), format="bgr24")
 
 # ==== Bagian Prediksi ====
-st.markdown("<div id='prediksi' style='min-height: 30vh; text-align: center;'><h1>Deteksi Penggunaan Helm Pada Pengendara Motor</h1> <br> <br></div>", unsafe_allow_html=True)
+st.markdown("<div id='prediksi' style='min-height: 30vh; text-align: center;'><h1>Prediksi Penggunaan Helm Pada Pengendara Motor</h1> <br> <p>Anda dapat memprediksi motor, pengguna helm dan non-helm dari gambar, video ataupun secara real-time menggunakan webcam di sini.</p> <br></div>", unsafe_allow_html=True)
 st.markdown('<div id="prediksi-anchor"></div>', unsafe_allow_html=True)
 col_left, col_center, col_right = st.columns([1, 3, 1])
 
