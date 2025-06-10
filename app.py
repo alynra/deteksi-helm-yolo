@@ -195,6 +195,10 @@ st.markdown("""
             margin: 0 auto;
             max-width: 100%;
         }
+
+        #prediksi {
+            margin-bottom: 100px;
+        }
     </style>
 
     <script>
