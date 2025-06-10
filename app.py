@@ -15,37 +15,49 @@ st.set_page_config(page_title="Deteksi Helm Pengendara Motor", layout="wide")
 
 st.markdown("""
     <style>
-        /* Agar semua elemen box menggunakan sistem ukuran fleksibel */
-    *, *::before, *::after {
-        box-sizing: border-box;
-    }
-
-    /* Navbar dan hero section full width dan responsif */
-    .navbar, .hero {
-        max-width: 100%;
-        width: 100%;
-        margin: 0 auto;
-    }
-
-    /* Pastikan tombol tidak overflow */
-    .hero button {
-        max-width: 90%;
-        width: auto;
-    }
-
-    /* Responsif untuk tampilan mobile */
-    @media screen and (max-width: 768px) {
-        .hero h1 {
-            font-size: 1.8em;
+            /* Agar semua elemen box menggunakan sistem ukuran fleksibel */
+        *, *::before, *::after {
+            box-sizing: border-box;
         }
-        .hero p {
-            font-size: 1em;
+        
+        section.main > div.block-container {
+                padding: 0rem;
+                max-width: 100%;
+                width: 100%;
+            }
+        div.block-container {
+                padding: 0 !important;
+                margin: 0 auto !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+        
+        /* Navbar dan hero section full width dan responsif */
+        .navbar, .hero {
+            max-width: 100%;
+            width: 100%;
+            margin: 0 auto;
         }
-        .navbar {
-            flex-direction: column;
-            align-items: flex-start;
+    
+        /* Pastikan tombol tidak overflow */
+        .hero button {
+            max-width: 90%;
+            width: auto;
         }
-    }
+    
+        /* Responsif untuk tampilan mobile */
+        @media screen and (max-width: 768px) {
+            .hero h1 {
+                font-size: 1.8em;
+            }
+            .hero p {
+                font-size: 1em;
+            }
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
         .hero {
             background-image: url('https://images.unsplash.com/photo-1571867424485-3694642b2f73'); 
             background-size: cover;
