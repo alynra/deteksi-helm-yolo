@@ -361,3 +361,5 @@ elif option == "Webcam":
         st.info("Menginisialisasi webcam...")
     else:
         st.warning("Webcam belum aktif atau tidak terdeteksi.")
+
+st.markdown('</div>', unsafe_allow_html=True)
