@@ -123,13 +123,65 @@ st.markdown("""
         .navbar a:hover {
             color: #e2e8f0;
         }
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropbtn {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 140px;
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+            z-index: 10000;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .dropdown-content a {
+            color: #333;
+            padding: 10px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
     </style>
 
     <div class="navbar">
         <div style="font-weight: bold; font-size: 1.2rem;">Deteksi Helm</div>
-        <div style="display: flex; flex-wrap: wrap;">
+        <div class="nav-right">
             <a href="#beranda">Beranda</a>
-            <a href="#prediksi">Prediksi</a>
+                <div class="dropdown">
+                  <a class="dropbtn">Prediksi ▾</a>
+                  <div class="dropdown-content">
+                    <a href="?mode=Gambar#prediksi">Gambar</a>
+                    <a href="?mode=Video#prediksi">Video</a>
+                    <a href="?mode=Webcam#prediksi">Webcam</a>
+                  </div>
+                </div>
+        </div>
         </div>
     </div>
 
@@ -139,6 +191,15 @@ st.markdown("""
         <a href="#prediksi"><button>Mulai Deteksi</button></a>
     </div>
 """, unsafe_allow_html=True)
+
+if "mode" not in st.session_state:
+    st.session_state["mode"] = "Gambar"
+
+query_params = st.query_params
+if "mode" in query_params:
+    st.session_state["mode"] = query_params["mode"]
+    
+option = st.session_state["mode"]
 
 # ===== Fungsi Prediksi Gambar =====
 def predict_image(image):
@@ -205,7 +266,7 @@ class YOLOProcessor(VideoProcessorBase):
 st.markdown("<div id='prediksi'></div>", unsafe_allow_html=True)
 st.header("Prediksi Penggunaan Helm Pada Pengendara Motor")
 
-option = st.radio("Pilih metode input:", ["Gambar", "Video", "Webcam"], horizontal=True)
+#option = st.radio("Pilih metode input:", ["Gambar", "Video", "Webcam"], horizontal=True)
 
 if option == "Gambar":
     uploaded_image = st.file_uploader("Upload gambar (jpg/jpeg/png)", type=["jpg", "jpeg", "png"])
