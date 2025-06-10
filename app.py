@@ -6,6 +6,8 @@ import cv2
 import numpy as np
 from PIL import Image
 from ultralytics import YOLO
+import streamlit.components.v1 as components
+
 
 # Load model
 model = YOLO("best.pt")
@@ -195,22 +197,6 @@ st.markdown("""
         }
     </script>
 
-    
-    <div class="navbar">
-        <div style="font-weight: bold; font-size: 1.2rem;">Deteksi Helm</div>
-        <div class="nav-right">
-            <a href="#beranda">Beranda</a>
-                <div class="dropdown">
-                  <div class="dropbtn">Prediksi ▾</div>
-                  <div class="dropdown-content">
-                    <div class="nav-item" onclick="setMode('Gambar')">Gambar</div>
-                    <div class="nav-item" onclick="setMode('Video')">Video</div>
-                    <div class="nav-item" onclick="setMode('Webcam')">Webcam</div>
-                  </div>
-                </div>
-        </div>
-        </div>
-    </div>
 
     <div class="hero" id="beranda">
         <h1>Deteksi Penggunaan Helm Pada Pengendara Motor</h1>
@@ -219,16 +205,90 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-if "mode" not in st.session_state:
-    st.session_state["mode"] = "Gambar"
+components.html("""
+    <div class="navbar">
+      <div style="font-weight: bold; font-size: 1.2rem; color: white;">Deteksi Helm</div>
+      <div class="nav-right">
+        <a href="#beranda" style="color: white; margin-right: 1rem;">Beranda</a>
+        <div class="dropdown">
+          <div class="dropbtn">Prediksi ▾</div>
+          <div class="dropdown-content">
+            <div class="nav-item" onclick="setMode('Gambar')">Gambar</div>
+            <div class="nav-item" onclick="setMode('Video')">Video</div>
+            <div class="nav-item" onclick="setMode('Webcam')">Webcam</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <script>
+    function setMode(mode) {
+        const query = new URLSearchParams(window.location.search);
+        query.set("mode", mode);
+        window.location.search = query.toString();
+    }
+    </script>
+    
+    <style>
+    .navbar {
+      background-color: #8a000d;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-right {
+      display: flex;
+      align-items: center;
+    }
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .dropbtn {
+      color: white;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: white;
+      min-width: 140px;
+      box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+      z-index: 10000;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .dropdown-content .nav-item {
+      padding: 10px 16px;
+      color: black;
+      cursor: pointer;
+    }
+    .dropdown-content .nav-item:hover {
+      background-color: #f1f1f1;
+    }
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+    </style>
+""", height=120)
 
-query_params = st.query_params
-if "mode" in query_params:
-    st.session_state["mode"] = query_params["mode"]
+
+#if "mode" not in st.session_state:
+    #st.session_state["mode"] = "Gambar"
+
+#query_params = st.query_params
+#if "mode" in query_params:
+    #st.session_state["mode"] = query_params["mode"]
 
 
     
-option = st.session_state["mode"]
+#option = st.session_state["mode"]
+
+option = st.query_params.get("mode", "Gambar")
+st.session_state["mode"] = option
+
 
 # ===== Fungsi Prediksi Gambar =====
 def predict_image(image):
