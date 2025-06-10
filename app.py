@@ -345,7 +345,8 @@ with col_center:
                     st.success("Deteksi selesai!")
         
                 st.image(result_image, caption="Hasil Deteksi", use_container_width=True)
-
+            st.markdown("<div style='height: 80px;'></div>", unsafe_allow_html=True)
+        
         elif option == "Video":
             uploaded_video = st.file_uploader("Upload video (mp4/mov)", type=["mp4", "mov"])
             if uploaded_video is not None:
@@ -369,6 +370,7 @@ with col_center:
                     file_name="video_deteksi_yolo.mp4",
                     mime="video/mp4"
                 )
+            st.markdown("<div style='height: 80px;'></div>", unsafe_allow_html=True)
         
         elif option == "Webcam":
             st.subheader("Deteksi Objek dari Webcam (Real-time)")
@@ -393,5 +395,6 @@ with col_center:
                 st.info("Menginisialisasi webcam...")
             else:
                 st.warning("Webcam belum aktif atau tidak terdeteksi.")
-        
+                
+            st.markdown("<div style='height: 80px;'></div>", unsafe_allow_html=True)
         #st.markdown('</div>', unsafe_allow_html=True)
