@@ -307,10 +307,7 @@ col_left, col_center, col_right = st.columns([0.5, 3, 0.5])
 
 with col_center:
     with st.container():
-        st.markdown("""
-            <div style="background-color: white; padding: 2rem; border-radius: 12px;
-                        box-shadow: 0 4px 12px rgba(0,0,0,0.06);">
-        """, unsafe_allow_html=True)
+        
         st.header("Prediksi Penggunaan Helm Pada Pengendara Motor")
         
         #option = st.radio("Pilih metode input:", ["Gambar", "Video", "Webcam"], horizontal=True)
@@ -371,4 +368,4 @@ with col_center:
             else:
                 st.warning("Webcam belum aktif atau tidak terdeteksi.")
         
-        st.markdown('</div>', unsafe_allow_html=True)
+        #st.markdown('</div>', unsafe_allow_html=True)
