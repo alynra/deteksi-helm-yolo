@@ -308,6 +308,18 @@ col_left, col_center, col_right = st.columns([1, 2, 1])
 
 with col_center:
     with st.container():
+        st.markdown("""
+            <style>
+                div[data-testid="stVerticalBlock"] > div.prediksi-container {
+                    background-color: white;
+                    padding: 2rem;
+                    border-radius: 12px;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+                    max-width: 700px;
+                    margin: 2rem auto;
+                }
+            </style>
+        """, unsafe_allow_html=True)
         st.header("Prediksi Penggunaan Helm Pada Pengendara Motor")
         
         #option = st.radio("Pilih metode input:", ["Gambar", "Video", "Webcam"], horizontal=True)
