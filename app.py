@@ -21,6 +21,7 @@ st.markdown("""
         html, body {
             margin: 0 !important;
             padding: 0 !important;
+            scroll-behavior: smooth;
         }
 
         section.main > div.block-container {
@@ -239,11 +240,15 @@ st.markdown("""
         }
         div[id="prediksi-anchor"] + div {
             background-color: transparent;
-            padding: 0;
+            padding: 2rem;
             box-shadow: none;
             margin: 0 auto;
             max-width: 100%;
             margin-bottom: 80px;
+            min-height: 100vh; /* ✅ Tinggi minimum 1 layar */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
     </style>
