@@ -76,7 +76,7 @@ st.markdown("""
             align-items: center;
             justify-content: space-between;
             padding: 100px 60px;
-            background: linear-gradient(to left, white 20%, #f49da4 20%, #ca0114 40%);
+            background-color: white;
             border-radius: 0;
             margin-top: 80px;
             gap: 2rem;
@@ -237,7 +237,7 @@ st.markdown("""
             box-shadow: none;
             margin: 0 auto;
             max-width: 100%;
-            margin-bottom: 20vh;
+            margin-bottom: 200px;
             display: flex;
             flex-direction: column;
             justify-content: center;
