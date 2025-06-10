@@ -169,6 +169,17 @@ st.markdown("""
 
     </style>
 
+    <script>
+        function setMode(mode) {
+            const url = new URL(window.location.href);
+            url.searchParams.set("mode", mode);
+            url.hash = "prediksi";
+            window.history.replaceState({}, "", url);
+            window.dispatchEvent(new Event('popstate')); 
+        }
+    </script>
+
+    
     <div class="navbar">
         <div style="font-weight: bold; font-size: 1.2rem;">Deteksi Helm</div>
         <div class="nav-right">
@@ -176,9 +187,9 @@ st.markdown("""
                 <div class="dropdown">
                   <a class="dropbtn">Prediksi ▾</a>
                   <div class="dropdown-content">
-                    <a href="?mode=Gambar#prediksi">Gambar</a>
-                    <a href="?mode=Video#prediksi">Video</a>
-                    <a href="?mode=Webcam#prediksi">Webcam</a>
+                    <div class="nav-item" onclick="setMode('Gambar')">Gambar</div>
+                    <div class="nav-item" onclick="setMode('Video')">Video</div>
+                    <div class="nav-item" onclick="setMode('Webcam')">Webcam</div>
                   </div>
                 </div>
         </div>
@@ -197,7 +208,10 @@ if "mode" not in st.session_state:
 
 query_params = st.query_params
 if "mode" in query_params:
-    st.session_state["mode"] = query_params["mode"]
+    mode = query_params["mode"]
+    if mode != st.session_state["mode"]:
+        st.session_state["mode"] = mode
+
     
 option = st.session_state["mode"]
 
