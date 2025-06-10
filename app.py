@@ -180,7 +180,7 @@ st.markdown("""
         .dropdown:hover .dropdown-content {
             display: block;
         }
-        .prediksi-container {
+        #prediksi-container {
             max-width: 700px;
             margin: 2rem auto;
             background-color: white;
@@ -308,10 +308,8 @@ col_left, col_center, col_right = st.columns([1, 2, 1])
 
 with col_center:
     with st.container():
-        st.markdown("""
-            <div style="background-color: white; padding: 2rem; border-radius: 12px;
-                        box-shadow: 0 4px 12px rgba(0,0,0,0.06);">
-        """, unsafe_allow_html=True)
+        st.markdown('<div id="prediksi-container">', unsafe_allow_html=True)
+
         st.header("Prediksi Penggunaan Helm Pada Pengendara Motor")
         
         #option = st.radio("Pilih metode input:", ["Gambar", "Video", "Webcam"], horizontal=True)
