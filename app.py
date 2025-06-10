@@ -302,20 +302,9 @@ class YOLOProcessor(VideoProcessorBase):
 
 # ==== Bagian Prediksi ====
 st.markdown("<div id='prediksi'></div>", unsafe_allow_html=True)
-st.markdown('<div class="prediksi-container">', unsafe_allow_html=True)
+
 with st.container():
-    st.markdown("""
-        <style>
-        #prediksi + div {
-            max-width: 700px;
-            margin: 2rem auto;
-            background-color: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-        }
-        </style>
-    """, unsafe_allow_html=True)
+    st.markdown('<div class="prediksi-container">', unsafe_allow_html=True)
     st.header("Prediksi Penggunaan Helm Pada Pengendara Motor")
     
     #option = st.radio("Pilih metode input:", ["Gambar", "Video", "Webcam"], horizontal=True)
@@ -376,4 +365,4 @@ with st.container():
         else:
             st.warning("Webcam belum aktif atau tidak terdeteksi.")
     
-st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
