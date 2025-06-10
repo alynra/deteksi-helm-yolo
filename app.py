@@ -180,12 +180,12 @@ st.markdown("""
         .dropdown:hover .dropdown-content {
             display: block;
         }
-        #prediksi-container {
-            max-width: 700px;
-            margin: 2rem auto;
-            background-color: white;
+        #prediksi-wrapper {
+            background-color: #ffffff; /* ubah warna di sini jika perlu */
             padding: 2rem;
             border-radius: 12px;
+            max-width: 700px;
+            margin: 2rem auto;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
         }
         div[id="prediksi-anchor"] + div {
@@ -307,37 +307,19 @@ st.markdown('<div id="prediksi-anchor"></div>', unsafe_allow_html=True)
 col_left, col_center, col_right = st.columns([1, 2, 1])
 
 with col_center:
-    with st.container():
-        st.markdown("""
-            <style>
-                div[data-testid="stVerticalBlock"] > div.prediksi-container {
-                    background-color: white;
-                    padding: 2rem;
-                    border-radius: 12px;
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-                    max-width: 700px;
-                    margin: 2rem auto;
-                }
-            </style>
-        """, unsafe_allow_html=True)
-        st.header("Prediksi Penggunaan Helm Pada Pengendara Motor")
+    st.markdown('<div id="prediksi-wrapper">', unsafe_allow_html=True)
         
         #option = st.radio("Pilih metode input:", ["Gambar", "Video", "Webcam"], horizontal=True)
         
         if option == "Gambar":
-            st.markdown('<div id="prediksi-container">', unsafe_allow_html=True)
-
             uploaded_image = st.file_uploader("Upload gambar (jpg/jpeg/png)", type=["jpg", "jpeg", "png"])
             if uploaded_image is not None:
                 image = Image.open(uploaded_image)
                 st.image(image, caption="Gambar yang diupload", use_container_width=True)
                 result_image = predict_image(np.array(image))
                 st.image(result_image, caption="Hasil Deteksi", use_container_width=True)
-
-            st.markdown('</div>', unsafe_allow_html=True)
         
         elif option == "Video":
-            st.markdown('<div id="prediksi-container">', unsafe_allow_html=True)
             uploaded_video = st.file_uploader("Upload video (mp4/mov)", type=["mp4", "mov"])
             if uploaded_video is not None:
                 tfile = tempfile.NamedTemporaryFile(delete=False)
@@ -360,9 +342,7 @@ with col_center:
                     file_name="video_deteksi_yolo.mp4",
                     mime="video/mp4"
                 )
-            st.markdown('</div>', unsafe_allow_html=True)
         elif option == "Webcam":
-            st.markdown('<div id="prediksi-container">', unsafe_allow_html=True)
             st.subheader("Deteksi Objek dari Webcam (Real-time)")
             st.markdown("Klik 'Allow' saat browser meminta izin webcam.")
         
@@ -386,4 +366,4 @@ with col_center:
             else:
                 st.warning("Webcam belum aktif atau tidak terdeteksi.")
         
-            st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
