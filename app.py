@@ -76,7 +76,7 @@ st.markdown("""
             align-items: center;
             justify-content: space-between;
             padding: 100px 60px;
-            background-color: white;
+            background: linear-gradient(to left, white 20%, #f49da4 20%, #ca0114 40%);
             border-radius: 0;
             margin-top: 80px;
             gap: 2rem;
@@ -230,22 +230,14 @@ st.markdown("""
         .dropdown:hover .dropdown-content {
             display: block;
         }
-        .prediksi-container {
-            max-width: 700px;
-            margin: 2rem auto;
-            background-color: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-        }
+        
         div[id="prediksi-anchor"] + div {
             background-color: transparent;
             padding: 2rem;
             box-shadow: none;
             margin: 0 auto;
             max-width: 100%;
-            margin-bottom: 80px;
-            min-height: 10vh; /* ✅ Tinggi minimum 1 layar */
+            margin-bottom: 20vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
