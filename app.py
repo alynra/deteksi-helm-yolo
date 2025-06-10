@@ -388,7 +388,7 @@ class YOLOProcessor(VideoProcessorBase):
         return av.VideoFrame.from_ndarray(annotated.astype(np.uint8), format="bgr24")
 
 # ==== Bagian Prediksi ====
-st.markdown("<div id='prediksi' style='min-height: 100vh;'></div>", unsafe_allow_html=True)
+st.markdown("<div id='prediksi' style='min-height: 50vh;'></div>", unsafe_allow_html=True)
 st.markdown('<div id="prediksi-anchor"></div>', unsafe_allow_html=True)
 col_left, col_center, col_right = st.columns([0.5, 3, 0.5])
 
