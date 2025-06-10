@@ -245,7 +245,7 @@ st.markdown("""
             margin: 0 auto;
             max-width: 100%;
             margin-bottom: 80px;
-            min-height: 50vh; /* ✅ Tinggi minimum 1 layar */
+            min-height: 10vh; /* ✅ Tinggi minimum 1 layar */
             display: flex;
             flex-direction: column;
             justify-content: center;
