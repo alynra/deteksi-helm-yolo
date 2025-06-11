@@ -474,8 +474,16 @@ with col_center:
             st.markdown("Klik 'Allow' saat browser meminta izin webcam.")
         
             rtc_config = {
-                "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
+                "iceServers": [
+                    {"urls": ["stun:stun.l.google.com:19302"]},
+                    {
+                        "urls": ["turn:openrelay.metered.ca:80"],
+                        "username": "openrelayproject",
+                        "credential": "openrelayproject"
+                    }
+                ]
             }
+
         
             webrtc_ctx = webrtc_streamer(
                 key="yolo-webcam",
