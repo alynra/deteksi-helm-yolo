@@ -264,7 +264,11 @@ st.markdown("""
 
     
     <div class="navbar">
-        <div style="font-weight: bold; font-size: 1.2rem;">Deteksi Helm</div>
+        <div style="font-weight: bold; font-size: 1.2rem;">
+            <img src="https://raw.githubusercontent.com/alynra/deteksi-helm-yolo/main/logo.png"
+             alt="Helmviz Logo"
+             style="height: 32px; width: 32px;">
+        </div>
         <div class="nav-right">
             <a href="#beranda">Beranda</a>
                 <div class="dropdown">
