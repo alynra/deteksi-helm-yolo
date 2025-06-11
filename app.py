@@ -265,9 +265,9 @@ st.markdown("""
     
     <div class="navbar">
         <div>
-            <img src="https://raw.githubusercontent.com/alynra/deteksi-helm-yolo/main/logo-fit.png"
+            <img src="https://raw.githubusercontent.com/alynra/deteksi-helm-yolo/main/logo-hijau.png"
              alt="Helmviz Logo"
-             style="height: 40px; width: auto; object-fit: contain;">
+             style="height: 32px; width: auto; object-fit: contain;">
         </div>
         <div class="nav-right">
             <a href="#beranda">Beranda</a>
