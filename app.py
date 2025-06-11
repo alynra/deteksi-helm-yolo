@@ -386,17 +386,28 @@ def resize_image(image_pil, max_size=1024):
 # ======= Kelas Webcam (streamlit-webrtc) =====
 class YOLOProcessor(VideoProcessorBase):
     def recv(self, frame: av.VideoFrame) -> av.VideoFrame:
-        img = frame.to_ndarray(format="bgr24")
-        print("[DEBUG] Menerima frame dari webcam")
-        results = model.predict(img, conf=0.1, verbose=False)
-        print("[DEBUG] Jumlah deteksi:", len(results[0].boxes))
-        if results and len(results[0].boxes) > 0:
-            annotated = results[0].plot()
-        else:
-            annotated = img  # Jika tidak ada deteksi, tampilkan frame asli
+        try:
+            img = frame.to_ndarray(format="bgr24")
+            print("[DEBUG] Menerima frame dari webcam")
 
-        # Kembalikan frame
-        return av.VideoFrame.from_ndarray(annotated.astype(np.uint8), format="bgr24")
+            results = model.predict(img, conf=0.1, verbose=False)
+
+            # Cek aman
+            if results and hasattr(results[0], 'boxes') and results[0].boxes is not None:
+                print("[DEBUG] Jumlah deteksi:", len(results[0].boxes))
+                if len(results[0].boxes) > 0:
+                    annotated = results[0].plot()
+                else:
+                    annotated = img
+            else:
+                print("[DEBUG] Tidak ada hasil deteksi")
+                annotated = img
+
+            return av.VideoFrame.from_ndarray(annotated.astype(np.uint8), format="bgr24")
+
+        except Exception as e:
+            print("❌ ERROR recv():", e)
+            return frame
 
 
 # ==== Bagian Prediksi ====
